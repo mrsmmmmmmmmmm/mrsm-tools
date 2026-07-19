@@ -1,0 +1,1832 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>7日間 快眠チェックリスト｜ミセスM</title>
+<style>
+  @import url('https://fonts.googleapis.com/css2?family=Noto+Sans+JP:wght@300;400;500;700&display=swap');
+
+  :root {
+    --bg: #f7f0e8;
+    --bg2: #f0e6da;
+    --surface: #fff8f2;
+    --pink: #c9969a;
+    --pink-light: #e8c4c7;
+    --pink-pale: #f5e0e1;
+    --beige: #d4b89a;
+    --beige-dark: #a8896e;
+    --text: #4a3728;
+    --text2: #7a5c4a;
+    --muted: #b09080;
+    --accent: #b07d82;
+    --green: #8faa96;
+    --radius: 12px;
+  }
+
+  * { box-sizing: border-box; margin: 0; padding: 0; }
+
+  body {
+    background: var(--bg);
+    color: var(--text);
+    font-family: 'Noto Sans JP', sans-serif;
+    font-weight: 300;
+    min-height: 100vh;
+    padding: 0 0 60px;
+  }
+
+  /* Header */
+  .header {
+    background: linear-gradient(135deg, #e8d0cb 0%, #dfc5bc 100%);
+    padding: 40px 24px 32px;
+    text-align: center;
+    border-bottom: 1px solid rgba(180,140,130,0.2);
+    position: relative;
+    overflow: hidden;
+  }
+
+  .header::before {
+    content: '🌙';
+    font-size: 80px;
+    position: absolute;
+    top: -20px;
+    right: -10px;
+    opacity: 0.12;
+  }
+
+  .header-badge {
+    display: inline-block;
+    font-size: 10px;
+    letter-spacing: 3px;
+    color: var(--accent);
+    text-transform: uppercase;
+    margin-bottom: 12px;
+    font-weight: 500;
+  }
+
+  .header h1 {
+    font-family: 'Noto Sans JP', sans-serif; font-weight: 700;
+    font-size: 22px;
+    font-weight: 700;
+    color: var(--text);
+    line-height: 1.5;
+    margin-bottom: 8px;
+  }
+
+  .header p {
+    font-size: 12px;
+    color: var(--text2);
+    line-height: 1.7;
+  }
+
+  /* Progress */
+  .progress-wrap {
+    padding: 24px 20px 0;
+    max-width: 480px;
+    margin: 0 auto;
+    background: var(--bg);
+  }
+
+  .progress-label {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-bottom: 10px;
+  }
+
+  .progress-label span {
+    font-size: 11px;
+    color: var(--muted);
+    letter-spacing: 1px;
+  }
+
+  .progress-label strong {
+    font-size: 13px;
+    color: var(--accent);
+    font-weight: 500;
+  }
+
+  .progress-bar {
+    height: 4px;
+    background: rgba(180,140,130,0.15);
+    border-radius: 2px;
+    overflow: hidden;
+  }
+
+  .progress-fill {
+    height: 100%;
+    background: linear-gradient(90deg, var(--pink), var(--beige));
+    border-radius: 2px;
+    transition: width 0.5s ease;
+    width: 0%;
+  }
+
+  /* Day tabs */
+  .tabs {
+    display: flex;
+    gap: 6px;
+    padding: 20px 20px 0;
+    overflow-x: auto;
+    max-width: 480px;
+    margin: 0 auto;
+    scrollbar-width: none;
+  }
+
+  .tabs::-webkit-scrollbar { display: none; }
+
+  .tab {
+    flex-shrink: 0;
+    padding: 8px 14px;
+    border-radius: 20px;
+    font-size: 12px;
+    font-weight: 500;
+    cursor: pointer;
+    border: 1px solid rgba(180,140,130,0.25);
+    background: var(--surface);
+    color: var(--muted);
+    transition: all 0.2s;
+    font-family: 'Noto Sans JP', sans-serif;
+  }
+
+  .tab.active {
+    background: var(--pink);
+    color: #fff;
+    border-color: var(--pink);
+  }
+
+  .tab.done {
+    background: rgba(143,170,150,0.15);
+    color: var(--green);
+    border-color: var(--green);
+  }
+
+  /* Day panel */
+  .day-panel {
+    display: none;
+    max-width: 480px;
+    margin: 0 auto;
+    padding: 20px 20px 0;
+    background: var(--bg);
+  }
+
+  .day-panel.active { display: block; }
+
+  .day-header {
+    margin-bottom: 20px;
+  }
+
+  .day-number {
+    font-size: 10px;
+    letter-spacing: 3px;
+    color: var(--accent);
+    text-transform: uppercase;
+    font-weight: 500;
+    margin-bottom: 6px;
+  }
+
+  .day-title {
+    font-family: 'Noto Sans JP', sans-serif; font-weight: 700;
+    font-size: 18px;
+    font-weight: 700;
+    color: var(--text);
+    line-height: 1.4;
+    margin-bottom: 8px;
+  }
+
+  .day-desc {
+    font-size: 12px;
+    color: var(--text2);
+    line-height: 1.8;
+  }
+
+  /* Check items */
+  .check-group {
+    margin-bottom: 20px;
+  }
+
+  .group-label {
+    font-size: 10px;
+    letter-spacing: 2px;
+    color: var(--accent);
+    text-transform: uppercase;
+    font-weight: 500;
+    margin-bottom: 10px;
+    padding-bottom: 6px;
+    border-bottom: 1px solid rgba(180,140,130,0.2);
+  }
+
+  .check-item {
+    display: flex;
+    align-items: flex-start;
+    gap: 14px;
+    padding: 14px 0;
+    border-bottom: 1px solid rgba(180,140,130,0.1);
+    cursor: pointer;
+    transition: opacity 0.2s;
+  }
+
+  .check-item:last-child { border-bottom: none; }
+
+  .check-item:hover { opacity: 0.75; }
+
+  .check-box {
+    flex-shrink: 0;
+    width: 22px;
+    height: 22px;
+    border: 1.5px solid rgba(180,140,130,0.35);
+    border-radius: 6px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    margin-top: 1px;
+    transition: all 0.2s;
+    background: var(--surface);
+  }
+
+  .check-item.checked .check-box {
+    background: var(--pink);
+    border-color: var(--pink);
+  }
+
+  .check-box svg {
+    display: none;
+  }
+
+  .check-item.checked .check-box svg {
+    display: block;
+  }
+
+  .check-content { flex: 1; }
+
+  .check-label {
+    font-size: 14px;
+    color: var(--text);
+    font-weight: 400;
+    line-height: 1.5;
+    margin-bottom: 3px;
+  }
+
+  .check-item.checked .check-label {
+    color: var(--muted);
+    text-decoration: line-through;
+    text-decoration-color: rgba(180,140,130,0.4);
+  }
+
+  .check-note {
+    font-size: 11px;
+    color: var(--muted);
+    line-height: 1.6;
+  }
+
+  /* Memo field */
+  .memo-wrap {
+    margin-top: 8px;
+    margin-bottom: 8px;
+  }
+
+  .memo-label {
+    font-size: 10px;
+    letter-spacing: 2px;
+    color: var(--accent);
+    text-transform: uppercase;
+    font-weight: 500;
+    margin-bottom: 8px;
+    display: block;
+  }
+
+  .memo-field {
+    width: 100%;
+    background: var(--surface);
+    border: 1px solid rgba(180,140,130,0.25);
+    border-radius: var(--radius);
+    padding: 14px;
+    color: var(--text);
+    font-family: 'Noto Sans JP', sans-serif;
+    font-size: 13px;
+    font-weight: 300;
+    line-height: 1.7;
+    resize: none;
+    min-height: 80px;
+    transition: border-color 0.2s;
+  }
+
+  .memo-field::placeholder { color: var(--muted); }
+  .memo-field:focus {
+    outline: none;
+    border-color: var(--pink-light);
+  }
+
+  /* Sleep record fields */
+  .record-grid {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 10px;
+    margin-bottom: 16px;
+  }
+
+  .record-field {
+    background: var(--surface);
+    border: 1px solid rgba(180,140,130,0.2);
+    border-radius: var(--radius);
+    padding: 12px;
+  }
+
+  .record-field label {
+    display: block;
+    font-size: 10px;
+    color: var(--accent);
+    letter-spacing: 1px;
+    margin-bottom: 6px;
+    font-weight: 500;
+  }
+
+  .record-field input,
+  .record-field select {
+    width: 100%;
+    background: transparent;
+    border: none;
+    color: var(--text);
+    font-family: 'Noto Sans JP', sans-serif;
+    font-size: 14px;
+    font-weight: 400;
+    outline: none;
+  }
+
+  .record-field select option {
+    background: var(--surface);
+    color: var(--text);
+  }
+
+  /* Tip box */
+  .tip-box {
+    background: var(--pink-pale);
+    border: 1px solid rgba(180,140,130,0.25);
+    border-radius: var(--radius);
+    padding: 14px 16px;
+    margin: 16px 0;
+  }
+
+  .tip-box .tip-icon {
+    font-size: 11px;
+    color: var(--accent);
+    letter-spacing: 2px;
+    font-weight: 500;
+    margin-bottom: 6px;
+    display: block;
+  }
+
+  .tip-box p {
+    font-size: 12px;
+    color: var(--text2);
+    line-height: 1.8;
+  }
+
+  /* Complete button */
+  .complete-btn {
+    width: 100%;
+    padding: 16px;
+    background: linear-gradient(135deg, var(--pink) 0%, #c4848a 100%);
+    border: none;
+    border-radius: var(--radius);
+    color: #fff;
+    font-family: 'Noto Sans JP', sans-serif;
+    font-size: 14px;
+    font-weight: 500;
+    cursor: pointer;
+    margin-top: 20px;
+    transition: all 0.2s;
+    letter-spacing: 1px;
+    box-shadow: 0 2px 12px rgba(180,120,130,0.25);
+  }
+
+  .complete-btn:hover {
+    transform: translateY(-1px);
+    box-shadow: 0 4px 16px rgba(180,120,130,0.35);
+  }
+
+  .complete-btn.done {
+    background: linear-gradient(135deg, rgba(143,170,150,0.4), rgba(143,170,150,0.25));
+    box-shadow: none;
+    color: var(--green);
+    border: 1px solid var(--green);
+  }
+
+  /* Completion message */
+  .completion-card {
+    background: linear-gradient(135deg, var(--pink-pale), #fdf0f0);
+    border: 1px solid rgba(180,140,130,0.25);
+    border-radius: var(--radius);
+    padding: 24px;
+    text-align: center;
+    margin-top: 24px;
+    display: none;
+  }
+
+  .completion-card.show { display: block; }
+
+  .completion-card .emoji { font-size: 40px; margin-bottom: 12px; }
+
+  .completion-card h3 {
+    font-family: 'Noto Sans JP', sans-serif; font-weight: 700;
+    font-size: 18px;
+    color: var(--text);
+    margin-bottom: 10px;
+  }
+
+  .completion-card p {
+    font-size: 12px;
+    color: var(--text2);
+    line-height: 1.8;
+  }
+
+  /* Nav buttons */
+  .nav-buttons {
+    display: flex;
+    gap: 10px;
+    margin-top: 16px;
+  }
+
+  .nav-btn {
+    flex: 1;
+    padding: 12px;
+    border-radius: var(--radius);
+    font-family: 'Noto Sans JP', sans-serif;
+    font-size: 13px;
+    font-weight: 500;
+    cursor: pointer;
+    transition: all 0.2s;
+    border: 1px solid rgba(180,140,130,0.25);
+    background: var(--surface);
+    color: var(--muted);
+  }
+
+  .nav-btn.next {
+    background: var(--bg2);
+    color: var(--text);
+    border-color: rgba(180,140,130,0.4);
+  }
+
+  .nav-btn:hover { opacity: 0.75; }
+
+  /* Footer note */
+  .footer-note {
+    max-width: 480px;
+    margin: 32px auto 0;
+    padding: 0 20px;
+    font-size: 11px;
+    color: var(--muted);
+    line-height: 1.8;
+    text-align: center;
+  }
+
+  /* Extra fields */
+  .extra-grid {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 10px;
+    margin-bottom: 16px;
+  }
+  .extra-field {
+    background: var(--surface);
+    border: 1px solid rgba(180,140,130,0.2);
+    border-radius: var(--radius);
+    padding: 12px;
+  }
+  .extra-field label {
+    display: block;
+    font-size: 10px;
+    color: var(--accent);
+    letter-spacing: 1px;
+    margin-bottom: 6px;
+    font-weight: 500;
+  }
+  .extra-field input,
+  .extra-field select,
+  .extra-field textarea {
+    width: 100%;
+    background: transparent;
+    border: none;
+    color: var(--text);
+    font-family: 'Noto Sans JP', sans-serif;
+    font-size: 13px;
+    font-weight: 400;
+    outline: none;
+    resize: none;
+  }
+  .extra-field.full { grid-column: 1 / -1; }
+  .extra-field textarea { min-height: 52px; line-height: 1.6; }
+  .extra-field select option { background: var(--surface); color: var(--text); }
+
+  /* Autosave badge */
+  .autosave-badge {
+    display: inline-flex;
+    align-items: center;
+    gap: 5px;
+    font-size: 10px;
+    color: var(--green);
+    letter-spacing: 1px;
+    margin-bottom: 10px;
+    opacity: 0;
+    transition: opacity 0.5s;
+  }
+  .autosave-badge.show { opacity: 1; }
+  .autosave-dot { width: 6px; height: 6px; border-radius: 50%; background: var(--green); }
+
+  /* Action buttons row */
+  .action-row {
+    display: flex;
+    gap: 10px;
+    max-width: 480px;
+    margin: 20px auto 0;
+    padding: 0 20px;
+  }
+  .action-btn {
+    flex: 1;
+    padding: 13px 8px;
+    border-radius: var(--radius);
+    font-family: 'Noto Sans JP', sans-serif;
+    font-size: 12px;
+    font-weight: 500;
+    cursor: pointer;
+    transition: all 0.2s;
+    border: 1px solid rgba(180,140,130,0.3);
+    background: var(--surface);
+    color: var(--text2);
+    text-align: center;
+  }
+  .action-btn:hover { opacity: 0.75; }
+  .action-btn.copy-btn { background: var(--pink); color: #fff; border-color: var(--pink); }
+  .action-btn.reset-btn { color: var(--muted); }
+
+  /* Copy modal */
+  .copy-modal {
+    display: none;
+    position: fixed;
+    inset: 0;
+    background: rgba(74,55,40,0.55);
+    z-index: 100;
+    align-items: center;
+    justify-content: center;
+  }
+  .copy-modal.show { display: flex; }
+  .copy-modal-inner {
+    background: var(--surface);
+    border-radius: 16px;
+    padding: 24px;
+    max-width: 340px;
+    width: 90%;
+    max-height: 72vh;
+    overflow-y: auto;
+  }
+  .copy-modal-inner h3 { font-size: 15px; font-weight: 700; color: var(--text); margin-bottom: 12px; }
+  .copy-modal-inner textarea {
+    width: 100%;
+    min-height: 180px;
+    background: var(--bg);
+    border: 1px solid rgba(180,140,130,0.2);
+    border-radius: 8px;
+    padding: 12px;
+    font-family: 'Noto Sans JP', sans-serif;
+    font-size: 12px;
+    color: var(--text);
+    resize: none;
+    line-height: 1.7;
+    margin-bottom: 12px;
+  }
+  .copy-modal-copy {
+    width: 100%;
+    padding: 12px;
+    background: var(--pink);
+    color: #fff;
+    border: none;
+    border-radius: 8px;
+    font-family: 'Noto Sans JP', sans-serif;
+    font-size: 13px;
+    font-weight: 500;
+    cursor: pointer;
+    margin-bottom: 8px;
+  }
+  .copy-modal-close {
+    width: 100%;
+    padding: 10px;
+    background: transparent;
+    color: var(--muted);
+    border: none;
+    font-family: 'Noto Sans JP', sans-serif;
+    font-size: 12px;
+    cursor: pointer;
+  }
+</style>
+</head>
+<body>
+
+<div class="header">
+  <div class="header-badge">Mrs. M × 7 Day Program</div>
+  <h1>眠れない原因を根本から整える<br>7日間チェックリスト</h1>
+  <p>毎日1分。記録するだけで、体は変わり始めます。</p>
+</div>
+
+<div class="progress-wrap">
+  <div class="progress-label">
+    <span>PROGRESS</span>
+    <strong id="progress-text">0 / 7 完了</strong>
+  </div>
+  <div class="progress-bar">
+    <div class="progress-fill" id="progress-fill"></div>
+  </div>
+</div>
+
+<div class="tabs" id="tabs">
+  <button class="tab active" onclick="showDay(0)">DAY 1</button>
+  <button class="tab" onclick="showDay(1)">DAY 2</button>
+  <button class="tab" onclick="showDay(2)">DAY 3</button>
+  <button class="tab" onclick="showDay(3)">DAY 4</button>
+  <button class="tab" onclick="showDay(4)">DAY 5</button>
+  <button class="tab" onclick="showDay(5)">DAY 6</button>
+  <button class="tab" onclick="showDay(6)">DAY 7</button>
+</div>
+
+<!-- DAY 1 -->
+<div class="day-panel active" id="day-0">
+  <div class="day-header">
+    <div class="day-number">DAY 1</div>
+    <div class="day-title">まず「記録」を始める</div>
+    <div class="day-desc">完璧にやろうとしない。書くだけでいい。記録が体を変える最初の一歩です。</div>
+  </div>
+
+  <div class="check-group">
+    <div class="group-label">今日のチェック</div>
+    <div class="check-item" onclick="toggleCheck(this)">
+      <div class="check-box"><svg width="12" height="10" viewBox="0 0 12 10" fill="none"><path d="M1 5L4.5 8.5L11 1" stroke="white" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/></svg></div>
+      <div class="check-content">
+        <div class="check-label">朝日を浴びた</div>
+        <div class="check-note">起きたら5分以内に窓を開けるか外に出る</div>
+      </div>
+    </div>
+    <div class="check-item" onclick="toggleCheck(this)">
+      <div class="check-box"><svg width="12" height="10" viewBox="0 0 12 10" fill="none"><path d="M1 5L4.5 8.5L11 1" stroke="white" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/></svg></div>
+      <div class="check-content">
+        <div class="check-label">朝一杯の水を飲んだ</div>
+        <div class="check-note">常温か白湯がおすすめ</div>
+      </div>
+    </div>
+    <div class="check-item" onclick="toggleCheck(this)">
+      <div class="check-box"><svg width="12" height="10" viewBox="0 0 12 10" fill="none"><path d="M1 5L4.5 8.5L11 1" stroke="white" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/></svg></div>
+      <div class="check-content">
+        <div class="check-label">今日の夕食時間を記録した</div>
+        <div class="check-note">何時に食べ終わったかだけでOK</div>
+      </div>
+    </div>
+  </div>
+
+  <div class="check-group">
+    <div class="group-label">今日の睡眠記録</div>
+    <div class="record-grid">
+      <div class="record-field">
+        <label>昨夜の夕食時間</label>
+        <input type="time" id="d0-dinner">
+      </div>
+      <div class="record-field">
+        <label>就寝時間</label>
+        <input type="time" id="d0-sleep">
+      </div>
+      <div class="record-field">
+        <label>起床時間</label>
+        <input type="time" id="d0-wake">
+      </div>
+      <div class="record-field">
+        <label>夜中に起きた回数</label>
+        <select id="d0-wakeup">
+          <option value="">選択</option>
+          <option>0回（朝まで）</option>
+          <option>1回</option>
+          <option>2回</option>
+          <option>3回以上</option>
+        </select>
+      </div>
+      <div class="record-field">
+        <label>朝の疲労感</label>
+        <select id="d0-fatigue">
+          <option value="">選択</option>
+          <option>すっきり</option>
+          <option>まあまあ</option>
+          <option>疲れている</option>
+          <option>とても疲れている</option>
+        </select>
+      </div>
+      <div class="record-field">
+        <label>日中の眠気</label>
+        <select id="d0-drowsy">
+          <option value="">選択</option>
+          <option>ほとんどなし</option>
+          <option>少しあった</option>
+          <option>かなりあった</option>
+          <option>我慢できないほど</option>
+        </select>
+      </div>
+    </div>
+  </div>
+
+  <!-- Extra fields d0 -->
+  <div class="group-label" style="margin-top:16px">追加記録</div>
+  <div class="extra-grid">
+    <div class="extra-field">
+      <label>最後のカフェイン時間</label>
+      <input type="time" id="d0-caffeine" placeholder="--:--">
+    </div>
+    <div class="extra-field">
+      <label>夕食後の甘いもの</label>
+      <select id="d0-sweets">
+        <option value="">選択</option>
+        <option>食べなかった</option>
+        <option>少し食べた</option>
+        <option>たくさん食べた</option>
+      </select>
+    </div>
+    <div class="extra-field">
+      <label>寝る前スマホ時間</label>
+      <select id="d0-screen">
+        <option value="">選択</option>
+        <option>見なかった</option>
+        <option>30分以内</option>
+        <option>1時間以内</option>
+        <option>1時間以上</option>
+      </select>
+    </div>
+    <div class="extra-field">
+      <label>目が覚めた時間</label>
+      <input type="time" id="d0-waketime" placeholder="--:--">
+    </div>
+    <div class="extra-field full">
+      <label>トイレ・覚醒メモ</label>
+      <textarea id="d0-toiletnote" placeholder="例：3時にトイレ、そのまま眠れなかった など"></textarea>
+    </div>
+    <div class="extra-field full">
+      <label>ミセスMへの今日の一言</label>
+      <textarea id="d0-message" placeholder="気になること、相談したいこと、今日の感想など"></textarea>
+    </div>
+  </div>
+  <div class="autosave-badge" id="autosave-badge"><span class="autosave-dot"></span>自動保存しました</div>
+
+  <div class="memo-wrap">
+    <span class="memo-label">今日の気づき・メモ</span>
+    <textarea class="memo-field" id="d0-memo" placeholder="気になったこと、体の変化、感じたことなど自由に"></textarea>
+  </div>
+
+  <div class="tip-box">
+    <span class="tip-icon">💡 POINT</span>
+    <p>今日は記録するだけでOK。完璧にやろうとしないことがDAY1の最大のポイントです。まず「書いた」という事実を作ることが大切です。</p>
+  </div>
+
+  <button class="complete-btn" id="complete-0" onclick="completeDay(0)">DAY 1 を完了にする</button>
+
+  <div class="nav-buttons">
+    <button class="nav-btn next" onclick="showDay(1)">DAY 2 へ →</button>
+  </div>
+</div>
+
+<!-- DAY 2 -->
+<div class="day-panel" id="day-1">
+  <div class="day-header">
+    <div class="day-number">DAY 2</div>
+    <div class="day-title">夕食を30分早める</div>
+    <div class="day-desc">昨日より30分だけ早める。15分でもいい。少しずつでいい。</div>
+  </div>
+
+  <div class="check-group">
+    <div class="group-label">今日のチェック</div>
+    <div class="check-item" onclick="toggleCheck(this)">
+      <div class="check-box"><svg width="12" height="10" viewBox="0 0 12 10" fill="none"><path d="M1 5L4.5 8.5L11 1" stroke="white" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/></svg></div>
+      <div class="check-content">
+        <div class="check-label">昨日より夕食を早めた</div>
+        <div class="check-note">30分が難しければ15分でもOK</div>
+      </div>
+    </div>
+    <div class="check-item" onclick="toggleCheck(this)">
+      <div class="check-box"><svg width="12" height="10" viewBox="0 0 12 10" fill="none"><path d="M1 5L4.5 8.5L11 1" stroke="white" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/></svg></div>
+      <div class="check-content">
+        <div class="check-label">食後に水を1杯飲んだ</div>
+        <div class="check-note">消化を助け、ミトコンドリアをサポート</div>
+      </div>
+    </div>
+    <div class="check-item" onclick="toggleCheck(this)">
+      <div class="check-box"><svg width="12" height="10" viewBox="0 0 12 10" fill="none"><path d="M1 5L4.5 8.5L11 1" stroke="white" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/></svg></div>
+      <div class="check-content">
+        <div class="check-label">DAY1と比べて変化があれば書いた</div>
+        <div class="check-note">小さな変化でOK</div>
+      </div>
+    </div>
+  </div>
+
+  <div class="check-group">
+    <div class="group-label">今日の睡眠記録</div>
+    <div class="record-grid">
+      <div class="record-field">
+        <label>今夜の夕食時間</label>
+        <input type="time" id="d1-dinner">
+      </div>
+      <div class="record-field">
+        <label>就寝時間</label>
+        <input type="time" id="d1-sleep">
+      </div>
+      <div class="record-field">
+        <label>起床時間</label>
+        <input type="time" id="d1-wake">
+      </div>
+      <div class="record-field">
+        <label>夜中に起きた回数</label>
+        <select id="d1-wakeup">
+          <option value="">選択</option>
+          <option>0回（朝まで）</option>
+          <option>1回</option>
+          <option>2回</option>
+          <option>3回以上</option>
+        </select>
+      </div>
+      <div class="record-field">
+        <label>朝の疲労感</label>
+        <select id="d1-fatigue">
+          <option value="">選択</option>
+          <option>すっきり</option>
+          <option>まあまあ</option>
+          <option>疲れている</option>
+          <option>とても疲れている</option>
+        </select>
+      </div>
+      <div class="record-field">
+        <label>日中の眠気</label>
+        <select id="d1-drowsy">
+          <option value="">選択</option>
+          <option>ほとんどなし</option>
+          <option>少しあった</option>
+          <option>かなりあった</option>
+          <option>我慢できないほど</option>
+        </select>
+      </div>
+    </div>
+  </div>
+
+  <!-- Extra fields d1 -->
+  <div class="group-label" style="margin-top:16px">追加記録</div>
+  <div class="extra-grid">
+    <div class="extra-field">
+      <label>最後のカフェイン時間</label>
+      <input type="time" id="d1-caffeine" placeholder="--:--">
+    </div>
+    <div class="extra-field">
+      <label>夕食後の甘いもの</label>
+      <select id="d1-sweets">
+        <option value="">選択</option>
+        <option>食べなかった</option>
+        <option>少し食べた</option>
+        <option>たくさん食べた</option>
+      </select>
+    </div>
+    <div class="extra-field">
+      <label>寝る前スマホ時間</label>
+      <select id="d1-screen">
+        <option value="">選択</option>
+        <option>見なかった</option>
+        <option>30分以内</option>
+        <option>1時間以内</option>
+        <option>1時間以上</option>
+      </select>
+    </div>
+    <div class="extra-field">
+      <label>目が覚めた時間</label>
+      <input type="time" id="d1-waketime" placeholder="--:--">
+    </div>
+    <div class="extra-field full">
+      <label>トイレ・覚醒メモ</label>
+      <textarea id="d1-toiletnote" placeholder="例：3時にトイレ、そのまま眠れなかった など"></textarea>
+    </div>
+    <div class="extra-field full">
+      <label>ミセスMへの今日の一言</label>
+      <textarea id="d1-message" placeholder="気になること、相談したいこと、今日の感想など"></textarea>
+    </div>
+  </div>
+  <div class="autosave-badge" id="autosave-badge"><span class="autosave-dot"></span>自動保存しました</div>
+
+  <div class="memo-wrap">
+    <span class="memo-label">今日の気づき・メモ</span>
+    <textarea class="memo-field" id="d1-memo" placeholder="DAY1との違い、体の感覚など"></textarea>
+  </div>
+
+  <div class="tip-box">
+    <span class="tip-icon">💡 POINT</span>
+    <p>就寝3時間前に食べ終えるのが理想。夜10時就寝なら夜7時まで。夜11時なら夜8時まで。今夜の目標時間を決めてみてください。</p>
+  </div>
+
+  <button class="complete-btn" id="complete-1" onclick="completeDay(1)">DAY 2 を完了にする</button>
+
+  <div class="nav-buttons">
+    <button class="nav-btn" onclick="showDay(0)">← DAY 1</button>
+    <button class="nav-btn next" onclick="showDay(2)">DAY 3 へ →</button>
+  </div>
+</div>
+
+<!-- DAY 3 -->
+<div class="day-panel" id="day-2">
+  <div class="day-header">
+    <div class="day-number">DAY 3</div>
+    <div class="day-title">朝の光を味方にする</div>
+    <div class="day-desc">体内時計をリセットする最強の方法は、朝の光です。曇りでも効果があります。</div>
+  </div>
+
+  <div class="check-group">
+    <div class="group-label">今日のチェック</div>
+    <div class="check-item" onclick="toggleCheck(this)">
+      <div class="check-box"><svg width="12" height="10" viewBox="0 0 12 10" fill="none"><path d="M1 5L4.5 8.5L11 1" stroke="white" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/></svg></div>
+      <div class="check-content">
+        <div class="check-label">起きて5分以内に窓を開けた・外に出た</div>
+        <div class="check-note">雨でも曇りでも外光には体内時計リセット効果あり</div>
+      </div>
+    </div>
+    <div class="check-item" onclick="toggleCheck(this)">
+      <div class="check-box"><svg width="12" height="10" viewBox="0 0 12 10" fill="none"><path d="M1 5L4.5 8.5L11 1" stroke="white" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/></svg></div>
+      <div class="check-content">
+        <div class="check-label">朝一杯の水（常温）を飲んだ</div>
+        <div class="check-note">コーヒーや食事より先に水から始める</div>
+      </div>
+    </div>
+    <div class="check-item" onclick="toggleCheck(this)">
+      <div class="check-box"><svg width="12" height="10" viewBox="0 0 12 10" fill="none"><path d="M1 5L4.5 8.5L11 1" stroke="white" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/></svg></div>
+      <div class="check-content">
+        <div class="check-label">夕食時間をDAY2より維持または早めた</div>
+        <div class="check-note">継続することが一番大切</div>
+      </div>
+    </div>
+  </div>
+
+  <div class="check-group">
+    <div class="group-label">今日の睡眠記録</div>
+    <div class="record-grid">
+      <div class="record-field">
+        <label>今夜の夕食時間</label>
+        <input type="time" id="d2-dinner">
+      </div>
+      <div class="record-field">
+        <label>就寝時間</label>
+        <input type="time" id="d2-sleep">
+      </div>
+      <div class="record-field">
+        <label>起床時間</label>
+        <input type="time" id="d2-wake">
+      </div>
+      <div class="record-field">
+        <label>夜中に起きた回数</label>
+        <select id="d2-wakeup">
+          <option value="">選択</option>
+          <option>0回（朝まで）</option>
+          <option>1回</option>
+          <option>2回</option>
+          <option>3回以上</option>
+        </select>
+      </div>
+      <div class="record-field">
+        <label>朝の疲労感</label>
+        <select id="d2-fatigue">
+          <option value="">選択</option>
+          <option>すっきり</option>
+          <option>まあまあ</option>
+          <option>疲れている</option>
+          <option>とても疲れている</option>
+        </select>
+      </div>
+      <div class="record-field">
+        <label>日中の眠気</label>
+        <select id="d2-drowsy">
+          <option value="">選択</option>
+          <option>ほとんどなし</option>
+          <option>少しあった</option>
+          <option>かなりあった</option>
+          <option>我慢できないほど</option>
+        </select>
+      </div>
+    </div>
+  </div>
+
+  <!-- Extra fields d2 -->
+  <div class="group-label" style="margin-top:16px">追加記録</div>
+  <div class="extra-grid">
+    <div class="extra-field">
+      <label>最後のカフェイン時間</label>
+      <input type="time" id="d2-caffeine" placeholder="--:--">
+    </div>
+    <div class="extra-field">
+      <label>夕食後の甘いもの</label>
+      <select id="d2-sweets">
+        <option value="">選択</option>
+        <option>食べなかった</option>
+        <option>少し食べた</option>
+        <option>たくさん食べた</option>
+      </select>
+    </div>
+    <div class="extra-field">
+      <label>寝る前スマホ時間</label>
+      <select id="d2-screen">
+        <option value="">選択</option>
+        <option>見なかった</option>
+        <option>30分以内</option>
+        <option>1時間以内</option>
+        <option>1時間以上</option>
+      </select>
+    </div>
+    <div class="extra-field">
+      <label>目が覚めた時間</label>
+      <input type="time" id="d2-waketime" placeholder="--:--">
+    </div>
+    <div class="extra-field full">
+      <label>トイレ・覚醒メモ</label>
+      <textarea id="d2-toiletnote" placeholder="例：3時にトイレ、そのまま眠れなかった など"></textarea>
+    </div>
+    <div class="extra-field full">
+      <label>ミセスMへの今日の一言</label>
+      <textarea id="d2-message" placeholder="気になること、相談したいこと、今日の感想など"></textarea>
+    </div>
+  </div>
+  <div class="autosave-badge" id="autosave-badge"><span class="autosave-dot"></span>自動保存しました</div>
+
+  <div class="memo-wrap">
+    <span class="memo-label">今日の気づき・メモ</span>
+    <textarea class="memo-field" id="d2-memo" placeholder="朝の光を浴びて感じたこと、体温の変化など"></textarea>
+  </div>
+
+  <div class="tip-box">
+    <span class="tip-icon">💡 POINT</span>
+    <p>朝の光を浴びてから約15〜16時間後にメラトニン（睡眠ホルモン）が分泌されます。朝7時に光を浴びれば、夜10〜11時に眠くなる体のリズムが整い始めます。</p>
+  </div>
+
+  <button class="complete-btn" id="complete-2" onclick="completeDay(2)">DAY 3 を完了にする</button>
+
+  <div class="nav-buttons">
+    <button class="nav-btn" onclick="showDay(1)">← DAY 2</button>
+    <button class="nav-btn next" onclick="showDay(3)">DAY 4 へ →</button>
+  </div>
+</div>
+
+<!-- DAY 4 -->
+<div class="day-panel" id="day-3">
+  <div class="day-header">
+    <div class="day-number">DAY 4</div>
+    <div class="day-title">血糖値を安定させる食べ方</div>
+    <div class="day-desc">夜中の覚醒は血糖値の乱れとつながっています。食べ方を少し変えるだけで変わります。</div>
+  </div>
+
+  <div class="check-group">
+    <div class="group-label">今日のチェック</div>
+    <div class="check-item" onclick="toggleCheck(this)">
+      <div class="check-box"><svg width="12" height="10" viewBox="0 0 12 10" fill="none"><path d="M1 5L4.5 8.5L11 1" stroke="white" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/></svg></div>
+      <div class="check-content">
+        <div class="check-label">朝食にたんぱく質を加えた</div>
+        <div class="check-note">卵・豆腐・納豆など。糖質だけで食べない</div>
+      </div>
+    </div>
+    <div class="check-item" onclick="toggleCheck(this)">
+      <div class="check-box"><svg width="12" height="10" viewBox="0 0 12 10" fill="none"><path d="M1 5L4.5 8.5L11 1" stroke="white" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/></svg></div>
+      <div class="check-content">
+        <div class="check-label">夕食後の甘いものをやめた</div>
+        <div class="check-note">夜の甘いものが血糖値を乱す最大の原因</div>
+      </div>
+    </div>
+    <div class="check-item" onclick="toggleCheck(this)">
+      <div class="check-box"><svg width="12" height="10" viewBox="0 0 12 10" fill="none"><path d="M1 5L4.5 8.5L11 1" stroke="white" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/></svg></div>
+      <div class="check-content">
+        <div class="check-label">夕食時間を継続して守れた</div>
+        <div class="check-note">DAY2・3からの継続</div>
+      </div>
+    </div>
+  </div>
+
+  <div class="check-group">
+    <div class="group-label">今日の睡眠記録</div>
+    <div class="record-grid">
+      <div class="record-field">
+        <label>今夜の夕食時間</label>
+        <input type="time" id="d3-dinner">
+      </div>
+      <div class="record-field">
+        <label>就寝時間</label>
+        <input type="time" id="d3-sleep">
+      </div>
+      <div class="record-field">
+        <label>起床時間</label>
+        <input type="time" id="d3-wake">
+      </div>
+      <div class="record-field">
+        <label>夜中に起きた回数</label>
+        <select id="d3-wakeup">
+          <option value="">選択</option>
+          <option>0回（朝まで）</option>
+          <option>1回</option>
+          <option>2回</option>
+          <option>3回以上</option>
+        </select>
+      </div>
+      <div class="record-field">
+        <label>朝の疲労感</label>
+        <select id="d3-fatigue">
+          <option value="">選択</option>
+          <option>すっきり</option>
+          <option>まあまあ</option>
+          <option>疲れている</option>
+          <option>とても疲れている</option>
+        </select>
+      </div>
+      <div class="record-field">
+        <label>日中の眠気</label>
+        <select id="d3-drowsy">
+          <option value="">選択</option>
+          <option>ほとんどなし</option>
+          <option>少しあった</option>
+          <option>かなりあった</option>
+          <option>我慢できないほど</option>
+        </select>
+      </div>
+    </div>
+  </div>
+
+  <!-- Extra fields d3 -->
+  <div class="group-label" style="margin-top:16px">追加記録</div>
+  <div class="extra-grid">
+    <div class="extra-field">
+      <label>最後のカフェイン時間</label>
+      <input type="time" id="d3-caffeine" placeholder="--:--">
+    </div>
+    <div class="extra-field">
+      <label>夕食後の甘いもの</label>
+      <select id="d3-sweets">
+        <option value="">選択</option>
+        <option>食べなかった</option>
+        <option>少し食べた</option>
+        <option>たくさん食べた</option>
+      </select>
+    </div>
+    <div class="extra-field">
+      <label>寝る前スマホ時間</label>
+      <select id="d3-screen">
+        <option value="">選択</option>
+        <option>見なかった</option>
+        <option>30分以内</option>
+        <option>1時間以内</option>
+        <option>1時間以上</option>
+      </select>
+    </div>
+    <div class="extra-field">
+      <label>目が覚めた時間</label>
+      <input type="time" id="d3-waketime" placeholder="--:--">
+    </div>
+    <div class="extra-field full">
+      <label>トイレ・覚醒メモ</label>
+      <textarea id="d3-toiletnote" placeholder="例：3時にトイレ、そのまま眠れなかった など"></textarea>
+    </div>
+    <div class="extra-field full">
+      <label>ミセスMへの今日の一言</label>
+      <textarea id="d3-message" placeholder="気になること、相談したいこと、今日の感想など"></textarea>
+    </div>
+  </div>
+  <div class="autosave-badge" id="autosave-badge"><span class="autosave-dot"></span>自動保存しました</div>
+
+  <div class="memo-wrap">
+    <span class="memo-label">今日の気づき・メモ</span>
+    <textarea class="memo-field" id="d3-memo" placeholder="甘いものへの欲求、食後の眠気の変化など"></textarea>
+  </div>
+
+  <div class="tip-box">
+    <span class="tip-icon">💡 POINT</span>
+    <p>夕食後に甘いものが欲しくなるのは意志が弱いからではありません。ミトコンドリアが疲弊してエネルギー不足になっているサインです。食べない時間が続くと、このサインが減っていきます。</p>
+  </div>
+
+  <button class="complete-btn" id="complete-3" onclick="completeDay(3)">DAY 4 を完了にする</button>
+
+  <div class="nav-buttons">
+    <button class="nav-btn" onclick="showDay(2)">← DAY 3</button>
+    <button class="nav-btn next" onclick="showDay(4)">DAY 5 へ →</button>
+  </div>
+</div>
+
+<!-- DAY 5 -->
+<div class="day-panel" id="day-4">
+  <div class="day-header">
+    <div class="day-number">DAY 5</div>
+    <div class="day-title">自律神経を整える夜の過ごし方</div>
+    <div class="day-desc">副交感神経を優位にする時間を意識的に作ります。眠れる体は「夜の準備」から始まります。</div>
+  </div>
+
+  <div class="check-group">
+    <div class="group-label">今日のチェック</div>
+    <div class="check-item" onclick="toggleCheck(this)">
+      <div class="check-box"><svg width="12" height="10" viewBox="0 0 12 10" fill="none"><path d="M1 5L4.5 8.5L11 1" stroke="white" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/></svg></div>
+      <div class="check-content">
+        <div class="check-label">夕食後に照明を少し暗くした</div>
+        <div class="check-note">蛍光灯の白い光より暖色系に切り替えると◎</div>
+      </div>
+    </div>
+    <div class="check-item" onclick="toggleCheck(this)">
+      <div class="check-box"><svg width="12" height="10" viewBox="0 0 12 10" fill="none"><path d="M1 5L4.5 8.5L11 1" stroke="white" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/></svg></div>
+      <div class="check-content">
+        <div class="check-label">湯船または足湯に入った</div>
+        <div class="check-note">シャワーのみの方は足湯10分でも効果あり</div>
+      </div>
+    </div>
+    <div class="check-item" onclick="toggleCheck(this)">
+      <div class="check-box"><svg width="12" height="10" viewBox="0 0 12 10" fill="none"><path d="M1 5L4.5 8.5L11 1" stroke="white" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/></svg></div>
+      <div class="check-content">
+        <div class="check-label">就寝1時間前からスマホの画面を暗くした</div>
+        <div class="check-note">ブルーライトはメラトニン分泌を抑制する</div>
+      </div>
+    </div>
+  </div>
+
+  <div class="check-group">
+    <div class="group-label">今日の睡眠記録</div>
+    <div class="record-grid">
+      <div class="record-field">
+        <label>今夜の夕食時間</label>
+        <input type="time" id="d4-dinner">
+      </div>
+      <div class="record-field">
+        <label>就寝時間</label>
+        <input type="time" id="d4-sleep">
+      </div>
+      <div class="record-field">
+        <label>起床時間</label>
+        <input type="time" id="d4-wake">
+      </div>
+      <div class="record-field">
+        <label>夜中に起きた回数</label>
+        <select id="d4-wakeup">
+          <option value="">選択</option>
+          <option>0回（朝まで）</option>
+          <option>1回</option>
+          <option>2回</option>
+          <option>3回以上</option>
+        </select>
+      </div>
+      <div class="record-field">
+        <label>朝の疲労感</label>
+        <select id="d4-fatigue">
+          <option value="">選択</option>
+          <option>すっきり</option>
+          <option>まあまあ</option>
+          <option>疲れている</option>
+          <option>とても疲れている</option>
+        </select>
+      </div>
+      <div class="record-field">
+        <label>日中の眠気</label>
+        <select id="d4-drowsy">
+          <option value="">選択</option>
+          <option>ほとんどなし</option>
+          <option>少しあった</option>
+          <option>かなりあった</option>
+          <option>我慢できないほど</option>
+        </select>
+      </div>
+    </div>
+  </div>
+
+  <!-- Extra fields d4 -->
+  <div class="group-label" style="margin-top:16px">追加記録</div>
+  <div class="extra-grid">
+    <div class="extra-field">
+      <label>最後のカフェイン時間</label>
+      <input type="time" id="d4-caffeine" placeholder="--:--">
+    </div>
+    <div class="extra-field">
+      <label>夕食後の甘いもの</label>
+      <select id="d4-sweets">
+        <option value="">選択</option>
+        <option>食べなかった</option>
+        <option>少し食べた</option>
+        <option>たくさん食べた</option>
+      </select>
+    </div>
+    <div class="extra-field">
+      <label>寝る前スマホ時間</label>
+      <select id="d4-screen">
+        <option value="">選択</option>
+        <option>見なかった</option>
+        <option>30分以内</option>
+        <option>1時間以内</option>
+        <option>1時間以上</option>
+      </select>
+    </div>
+    <div class="extra-field">
+      <label>目が覚めた時間</label>
+      <input type="time" id="d4-waketime" placeholder="--:--">
+    </div>
+    <div class="extra-field full">
+      <label>トイレ・覚醒メモ</label>
+      <textarea id="d4-toiletnote" placeholder="例：3時にトイレ、そのまま眠れなかった など"></textarea>
+    </div>
+    <div class="extra-field full">
+      <label>ミセスMへの今日の一言</label>
+      <textarea id="d4-message" placeholder="気になること、相談したいこと、今日の感想など"></textarea>
+    </div>
+  </div>
+  <div class="autosave-badge" id="autosave-badge"><span class="autosave-dot"></span>自動保存しました</div>
+
+  <div class="memo-wrap">
+    <span class="memo-label">今日の気づき・メモ</span>
+    <textarea class="memo-field" id="d4-memo" placeholder="入浴後の体の感覚、眠りにつくまでの時間など"></textarea>
+  </div>
+
+  <div class="tip-box">
+    <span class="tip-icon">💡 POINT</span>
+    <p>入浴で上がった体温が下がるタイミング（入浴後60〜90分）が最も眠りに入りやすい時間です。就寝1〜1.5時間前の入浴がおすすめです。</p>
+  </div>
+
+  <button class="complete-btn" id="complete-4" onclick="completeDay(4)">DAY 5 を完了にする</button>
+
+  <div class="nav-buttons">
+    <button class="nav-btn" onclick="showDay(3)">← DAY 4</button>
+    <button class="nav-btn next" onclick="showDay(5)">DAY 6 へ →</button>
+  </div>
+</div>
+
+<!-- DAY 6 -->
+<div class="day-panel" id="day-5">
+  <div class="day-header">
+    <div class="day-number">DAY 6</div>
+    <div class="day-title">空腹時間を12時間に伸ばす</div>
+    <div class="day-desc">ミトコンドリアが本格的に修復を始める時間です。怖くありません。</div>
+  </div>
+
+  <div class="check-group">
+    <div class="group-label">今日のチェック</div>
+    <div class="check-item" onclick="toggleCheck(this)">
+      <div class="check-box"><svg width="12" height="10" viewBox="0 0 12 10" fill="none"><path d="M1 5L4.5 8.5L11 1" stroke="white" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/></svg></div>
+      <div class="check-content">
+        <div class="check-label">夕食から翌朝まで12時間空けた</div>
+        <div class="check-note">例：夜7時に食べ終えたら朝7時まで</div>
+      </div>
+    </div>
+    <div class="check-item" onclick="toggleCheck(this)">
+      <div class="check-box"><svg width="12" height="10" viewBox="0 0 12 10" fill="none"><path d="M1 5L4.5 8.5L11 1" stroke="white" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/></svg></div>
+      <div class="check-content">
+        <div class="check-label">朝起きたら水か白湯から始めた</div>
+        <div class="check-note">食事の前に水で胃腸を起こす</div>
+      </div>
+    </div>
+    <div class="check-item" onclick="toggleCheck(this)">
+      <div class="check-box"><svg width="12" height="10" viewBox="0 0 12 10" fill="none"><path d="M1 5L4.5 8.5L11 1" stroke="white" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/></svg></div>
+      <div class="check-content">
+        <div class="check-label">空腹感があっても30分様子を見た</div>
+        <div class="check-note">空腹感は脂肪燃焼が始まったサイン</div>
+      </div>
+    </div>
+  </div>
+
+  <div class="check-group">
+    <div class="group-label">今日の睡眠記録</div>
+    <div class="record-grid">
+      <div class="record-field">
+        <label>今夜の夕食時間</label>
+        <input type="time" id="d5-dinner">
+      </div>
+      <div class="record-field">
+        <label>就寝時間</label>
+        <input type="time" id="d5-sleep">
+      </div>
+      <div class="record-field">
+        <label>起床時間</label>
+        <input type="time" id="d5-wake">
+      </div>
+      <div class="record-field">
+        <label>夜中に起きた回数</label>
+        <select id="d5-wakeup">
+          <option value="">選択</option>
+          <option>0回（朝まで）</option>
+          <option>1回</option>
+          <option>2回</option>
+          <option>3回以上</option>
+        </select>
+      </div>
+      <div class="record-field">
+        <label>朝の疲労感</label>
+        <select id="d5-fatigue">
+          <option value="">選択</option>
+          <option>すっきり</option>
+          <option>まあまあ</option>
+          <option>疲れている</option>
+          <option>とても疲れている</option>
+        </select>
+      </div>
+      <div class="record-field">
+        <label>日中の眠気</label>
+        <select id="d5-drowsy">
+          <option value="">選択</option>
+          <option>ほとんどなし</option>
+          <option>少しあった</option>
+          <option>かなりあった</option>
+          <option>我慢できないほど</option>
+        </select>
+      </div>
+    </div>
+  </div>
+
+  <!-- Extra fields d5 -->
+  <div class="group-label" style="margin-top:16px">追加記録</div>
+  <div class="extra-grid">
+    <div class="extra-field">
+      <label>最後のカフェイン時間</label>
+      <input type="time" id="d5-caffeine" placeholder="--:--">
+    </div>
+    <div class="extra-field">
+      <label>夕食後の甘いもの</label>
+      <select id="d5-sweets">
+        <option value="">選択</option>
+        <option>食べなかった</option>
+        <option>少し食べた</option>
+        <option>たくさん食べた</option>
+      </select>
+    </div>
+    <div class="extra-field">
+      <label>寝る前スマホ時間</label>
+      <select id="d5-screen">
+        <option value="">選択</option>
+        <option>見なかった</option>
+        <option>30分以内</option>
+        <option>1時間以内</option>
+        <option>1時間以上</option>
+      </select>
+    </div>
+    <div class="extra-field">
+      <label>目が覚めた時間</label>
+      <input type="time" id="d5-waketime" placeholder="--:--">
+    </div>
+    <div class="extra-field full">
+      <label>トイレ・覚醒メモ</label>
+      <textarea id="d5-toiletnote" placeholder="例：3時にトイレ、そのまま眠れなかった など"></textarea>
+    </div>
+    <div class="extra-field full">
+      <label>ミセスMへの今日の一言</label>
+      <textarea id="d5-message" placeholder="気になること、相談したいこと、今日の感想など"></textarea>
+    </div>
+  </div>
+  <div class="autosave-badge" id="autosave-badge"><span class="autosave-dot"></span>自動保存しました</div>
+
+  <div class="memo-wrap">
+    <span class="memo-label">今日の気づき・メモ</span>
+    <textarea class="memo-field" id="d5-memo" placeholder="空腹感の変化、体の軽さ、眠りの変化など"></textarea>
+  </div>
+
+  <div class="tip-box">
+    <span class="tip-icon">💡 POINT</span>
+    <p>空腹感は「低血糖」ではなく「脂肪燃焼回路が動き始めたサイン」のことが多いです。怖くありません。水を飲んで30分様子を見てください。多くの場合、空腹感は自然に和らぎます。</p>
+  </div>
+
+  <button class="complete-btn" id="complete-5" onclick="completeDay(5)">DAY 6 を完了にする</button>
+
+  <div class="nav-buttons">
+    <button class="nav-btn" onclick="showDay(4)">← DAY 5</button>
+    <button class="nav-btn next" onclick="showDay(6)">DAY 7 へ →</button>
+  </div>
+</div>
+
+<!-- DAY 7 -->
+<div class="day-panel" id="day-6">
+  <div class="day-header">
+    <div class="day-number">DAY 7</div>
+    <div class="day-title">7日間を振り返る</div>
+    <div class="day-desc">完璧じゃなくていい。1つ変わったなら、それがミトコンドリアが動き始めたサインです。</div>
+  </div>
+
+  <div class="check-group">
+    <div class="group-label">最終日のチェック</div>
+    <div class="check-item" onclick="toggleCheck(this)">
+      <div class="check-box"><svg width="12" height="10" viewBox="0 0 12 10" fill="none"><path d="M1 5L4.5 8.5L11 1" stroke="white" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/></svg></div>
+      <div class="check-content">
+        <div class="check-label">DAY1と今日の夜中に起きた回数を比べた</div>
+        <div class="check-note">減っていたら大きな変化のサインです</div>
+      </div>
+    </div>
+    <div class="check-item" onclick="toggleCheck(this)">
+      <div class="check-box"><svg width="12" height="10" viewBox="0 0 12 10" fill="none"><path d="M1 5L4.5 8.5L11 1" stroke="white" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/></svg></div>
+      <div class="check-content">
+        <div class="check-label">朝の疲労感の変化を確認した</div>
+        <div class="check-note">「少し楽になった」も立派な変化</div>
+      </div>
+    </div>
+    <div class="check-item" onclick="toggleCheck(this)">
+      <div class="check-box"><svg width="12" height="10" viewBox="0 0 12 10" fill="none"><path d="M1 5L4.5 8.5L11 1" stroke="white" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/></svg></div>
+      <div class="check-content">
+        <div class="check-label">7日間で1つ以上変わったことがあった</div>
+        <div class="check-note">どんな小さな変化でもOK</div>
+      </div>
+    </div>
+  </div>
+
+  <div class="check-group">
+    <div class="group-label">最終日の睡眠記録</div>
+    <div class="record-grid">
+      <div class="record-field">
+        <label>今夜の夕食時間</label>
+        <input type="time" id="d6-dinner">
+      </div>
+      <div class="record-field">
+        <label>就寝時間</label>
+        <input type="time" id="d6-sleep">
+      </div>
+      <div class="record-field">
+        <label>起床時間</label>
+        <input type="time" id="d6-wake">
+      </div>
+      <div class="record-field">
+        <label>夜中に起きた回数</label>
+        <select id="d6-wakeup">
+          <option value="">選択</option>
+          <option>0回（朝まで）</option>
+          <option>1回</option>
+          <option>2回</option>
+          <option>3回以上</option>
+        </select>
+      </div>
+      <div class="record-field">
+        <label>朝の疲労感</label>
+        <select id="d6-fatigue">
+          <option value="">選択</option>
+          <option>すっきり</option>
+          <option>まあまあ</option>
+          <option>疲れている</option>
+          <option>とても疲れている</option>
+        </select>
+      </div>
+      <div class="record-field">
+        <label>日中の眠気</label>
+        <select id="d6-drowsy">
+          <option value="">選択</option>
+          <option>ほとんどなし</option>
+          <option>少しあった</option>
+          <option>かなりあった</option>
+          <option>我慢できないほど</option>
+        </select>
+      </div>
+    </div>
+  </div>
+
+
+  <!-- Extra fields d6 -->
+  <div class="group-label" style="margin-top:16px">追加記録</div>
+  <div class="extra-grid">
+    <div class="extra-field">
+      <label>最後のカフェイン時間</label>
+      <input type="time" id="d6-caffeine" placeholder="--:--">
+    </div>
+    <div class="extra-field">
+      <label>夕食後の甘いもの</label>
+      <select id="d6-sweets">
+        <option value="">選択</option>
+        <option>食べなかった</option>
+        <option>少し食べた</option>
+        <option>たくさん食べた</option>
+      </select>
+    </div>
+    <div class="extra-field">
+      <label>寝る前スマホ時間</label>
+      <select id="d6-screen">
+        <option value="">選択</option>
+        <option>見なかった</option>
+        <option>30分以内</option>
+        <option>1時間以内</option>
+        <option>1時間以上</option>
+      </select>
+    </div>
+    <div class="extra-field">
+      <label>目が覚めた時間</label>
+      <input type="time" id="d6-waketime" placeholder="--:--">
+    </div>
+    <div class="extra-field full">
+      <label>トイレ・覚醒メモ</label>
+      <textarea id="d6-toiletnote" placeholder="例：3時にトイレ、そのまま眠れなかった など"></textarea>
+    </div>
+    <div class="extra-field full">
+      <label>ミセスMへの今日の一言</label>
+      <textarea id="d6-message" placeholder="7日間を終えて、ミセスMへ伝えたいことを自由に"></textarea>
+    </div>
+  </div>
+  <div class="autosave-badge" id="autosave-badge-d6"><span class="autosave-dot"></span>自動保存しました</div>
+
+  <div class="memo-wrap">
+    <span class="memo-label">7日間の振り返り・感想</span>
+    <textarea class="memo-field" id="d6-memo" placeholder="7日間を通じて変わったこと、気づいたこと、続けたいこと、ミセスMへの感想など自由に書いてください"></textarea>
+  </div>
+
+  <div class="tip-box">
+    <span class="tip-icon">🌿 ミセスMより</span>
+    <p>7日間、お疲れ様でした。完璧にできなくて当然です。1つでも変わったことがあれば、それがミトコンドリアが動き始めたサインです。この記録があなたの体の変化を証明しています。</p>
+  </div>
+
+  <button class="complete-btn" id="complete-6" onclick="completeDay(6)">7日間プログラム完了！</button>
+
+  <div class="completion-card" id="completion-card">
+    <div class="emoji">🌙</div>
+    <h3>7日間、完走しました</h3>
+    <p>記録を続けたあなたの体は、もう変わり始めています。<br>この7日間の記録を、ミセスMへの感想コメントに添えて送ってください🌿</p>
+  </div>
+
+  <div class="nav-buttons">
+    <button class="nav-btn" onclick="showDay(5)">← DAY 6</button>
+  </div>
+</div>
+
+<!-- Action buttons -->
+<div class="action-row">
+  <button class="action-btn copy-btn" onclick="openCopyModal()">📋 7日間の記録をまとめてコピー</button>
+  <button class="action-btn reset-btn" onclick="confirmReset()">🔄 リセット</button>
+</div>
+
+<p class="footer-note">※本プログラムの内容は個人の体験・見解です。医療行為ではありません。持病のある方・服薬中の方は必ず医師にご相談ください。効果には個人差があります。</p>
+
+<!-- Copy modal -->
+<div class="copy-modal" id="copy-modal">
+  <div class="copy-modal-inner">
+    <h3>🌿 7日間の記録まとめ</h3>
+    <textarea id="copy-text" readonly></textarea>
+    <button class="copy-modal-copy" onclick="copyText()">テキストをコピーする</button>
+    <button class="copy-modal-close" onclick="closeCopyModal()">閉じる</button>
+  </div>
+</div>
+
+<script>
+const DAYS = 7;
+const completedDays = new Array(DAYS).fill(false);
+let saveTimer = null;
+
+// ── field IDs per day ──
+function fieldIds(d) {
+  return [
+    `d${d}-dinner`, `d${d}-sleep`, `d${d}-wake`,
+    `d${d}-wakeup`, `d${d}-fatigue`, `d${d}-drowsy`,
+    `d${d}-caffeine`, `d${d}-sweets`, `d${d}-screen`,
+    `d${d}-waketime`, `d${d}-toiletnote`, `d${d}-message`, `d${d}-memo`
+  ];
+}
+
+// ── autosave to localStorage ──
+function saveAll() {
+  const data = {};
+  for (let d = 0; d < DAYS; d++) {
+    fieldIds(d).forEach(id => {
+      const el = document.getElementById(id);
+      if (el) data[id] = el.value;
+    });
+    // checkboxes
+    const panel = document.getElementById('day-' + d);
+    if (panel) {
+      const checks = panel.querySelectorAll('.check-item');
+      checks.forEach((c, i) => { data[`d${d}-check${i}`] = c.classList.contains('checked'); });
+    }
+    data[`d${d}-complete`] = completedDays[d];
+  }
+  try { localStorage.setItem('mrsm_sleep_log', JSON.stringify(data)); } catch(e) {}
+  // flash badge
+  const badge = document.getElementById('autosave-badge');
+  if (badge) { badge.classList.add('show'); setTimeout(() => badge.classList.remove('show'), 1800); }
+}
+
+function loadAll() {
+  let data;
+  try { data = JSON.parse(localStorage.getItem('mrsm_sleep_log') || 'null'); } catch(e) {}
+  if (!data) return;
+  for (let d = 0; d < DAYS; d++) {
+    fieldIds(d).forEach(id => {
+      const el = document.getElementById(id);
+      if (el && data[id] !== undefined) el.value = data[id];
+    });
+    const panel = document.getElementById('day-' + d);
+    if (panel) {
+      const checks = panel.querySelectorAll('.check-item');
+      checks.forEach((c, i) => {
+        if (data[`d${d}-check${i}`]) c.classList.add('checked');
+      });
+    }
+    if (data[`d${d}-complete`]) {
+      completedDays[d] = true;
+      const btn = document.getElementById('complete-' + d);
+      if (btn) { btn.textContent = '✓ 完了済み'; btn.classList.add('done'); }
+      const tabs = document.querySelectorAll('.tab');
+      if (tabs[d]) tabs[d].classList.add('done');
+    }
+  }
+  updateProgress();
+  if (completedDays[6]) {
+    const card = document.getElementById('completion-card');
+    if (card) card.classList.add('show');
+  }
+}
+
+function scheduleSave() {
+  clearTimeout(saveTimer);
+  saveTimer = setTimeout(saveAll, 800);
+}
+
+// ── UI functions ──
+function showDay(index) {
+  document.querySelectorAll('.day-panel').forEach((p, i) => p.classList.toggle('active', i === index));
+  document.querySelectorAll('.tab').forEach((t, i) => {
+    t.classList.remove('active');
+    if (i === index) t.classList.add('active');
+  });
+}
+
+function toggleCheck(item) {
+  item.classList.toggle('checked');
+  scheduleSave();
+}
+
+function completeDay(dayIndex) {
+  completedDays[dayIndex] = true;
+  const btn = document.getElementById('complete-' + dayIndex);
+  btn.textContent = '✓ 完了済み';
+  btn.classList.add('done');
+  document.querySelectorAll('.tab')[dayIndex].classList.add('done');
+  if (dayIndex === 6) document.getElementById('completion-card').classList.add('show');
+  updateProgress();
+  saveAll();
+}
+
+function updateProgress() {
+  const done = completedDays.filter(Boolean).length;
+  document.getElementById('progress-text').textContent = done + ' / 7 完了';
+  document.getElementById('progress-fill').style.width = (done / 7 * 100) + '%';
+}
+
+// ── copy modal ──
+const dayNames = ['DAY1 記録を始める','DAY2 夕食を早める','DAY3 朝の光','DAY4 血糖値','DAY5 自律神経','DAY6 空腹時間','DAY7 振り返り'];
+const labels = {
+  dinner:'夕食時間', sleep:'就寝時間', wake:'起床時間',
+  wakeup:'夜中に起きた回数', fatigue:'朝の疲労感', drowsy:'日中の眠気',
+  caffeine:'最後のカフェイン', sweets:'夕食後の甘いもの',
+  screen:'寝る前スマホ', waketime:'目が覚めた時間',
+  toiletnote:'トイレ・覚醒メモ', message:'ミセスMへの一言', memo:'今日の気づき'
+};
+
+function buildSummary() {
+  let text = '🌙 7日間 快眠チェックリスト まとめ\n';
+  text += '━━━━━━━━━━━━━━━━━━\n\n';
+  for (let d = 0; d < DAYS; d++) {
+    text += `【${dayNames[d]}】\n`;
+    Object.entries(labels).forEach(([key, label]) => {
+      const el = document.getElementById(`d${d}-${key}`);
+      const val = el ? el.value.trim() : '';
+      if (val) text += `・${label}：${val}\n`;
+    });
+    const panel = document.getElementById('day-' + d);
+    if (panel) {
+      const checks = panel.querySelectorAll('.check-item.checked .check-label');
+      if (checks.length) {
+        text += '・チェック済み：';
+        text += Array.from(checks).map(c => c.textContent.trim()).join('、') + '\n';
+      }
+    }
+    text += '\n';
+  }
+  text += '━━━━━━━━━━━━━━━━━━\n';
+  text += '脳外科ナース × ミトコンドリア活性化 | ミセスM\n';
+  return text;
+}
+
+function openCopyModal() {
+  document.getElementById('copy-text').value = buildSummary();
+  document.getElementById('copy-modal').classList.add('show');
+}
+
+function closeCopyModal() {
+  document.getElementById('copy-modal').classList.remove('show');
+}
+
+function copyText() {
+  const ta = document.getElementById('copy-text');
+  ta.select();
+  try {
+    navigator.clipboard.writeText(ta.value).then(() => {
+      const btn = document.querySelector('.copy-modal-copy');
+      btn.textContent = '✓ コピーしました！';
+      setTimeout(() => { btn.textContent = 'テキストをコピーする'; }, 2000);
+    });
+  } catch(e) {
+    document.execCommand('copy');
+  }
+}
+
+// ── reset ──
+function confirmReset() {
+  if (confirm('7日間の記録をすべてリセットしますか？\nこの操作は元に戻せません。')) {
+    try { localStorage.removeItem('mrsm_sleep_log'); } catch(e) {}
+    location.reload();
+  }
+}
+
+// ── auto-attach input listeners ──
+window.addEventListener('DOMContentLoaded', () => {
+  loadAll();
+  document.querySelectorAll('input, select, textarea').forEach(el => {
+    el.addEventListener('change', scheduleSave);
+    el.addEventListener('input', scheduleSave);
+  });
+});
+</script>
+</body>
+</html>
