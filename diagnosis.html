@@ -1,0 +1,806 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>眠りタイプ診断｜ミセスM</title>
+<style>
+@import url('https://fonts.googleapis.com/css2?family=Noto+Sans+JP:wght@300;400;500;700&display=swap');
+
+:root {
+  --bg: #f7f0e8;
+  --bg2: #f0e6da;
+  --surface: #fff8f2;
+  --pink: #c9969a;
+  --pink-light: #e8c4c7;
+  --pink-pale: #f5e0e1;
+  --beige: #d4b89a;
+  --beige-dark: #a8896e;
+  --text: #4a3728;
+  --text2: #7a5c4a;
+  --muted: #b09080;
+  --accent: #b07d82;
+  --green: #8faa96;
+  --radius: 12px;
+}
+
+* { box-sizing: border-box; margin: 0; padding: 0; }
+
+body {
+  background: var(--bg);
+  color: var(--text);
+  font-family: 'Noto Sans JP', sans-serif;
+  font-weight: 300;
+  min-height: 100vh;
+  padding: 0 0 60px;
+}
+
+.header {
+  background: linear-gradient(135deg, #e8d0cb 0%, #dfc5bc 100%);
+  padding: 40px 24px 32px;
+  text-align: center;
+  border-bottom: 1px solid rgba(180,140,130,0.2);
+  position: relative;
+  overflow: hidden;
+}
+.header::before {
+  content: '🌙';
+  font-size: 80px;
+  position: absolute;
+  top: -20px;
+  right: -10px;
+  opacity: 0.12;
+}
+.header-badge {
+  display: inline-block;
+  font-size: 10px;
+  letter-spacing: 3px;
+  color: var(--accent);
+  text-transform: uppercase;
+  margin-bottom: 12px;
+  font-weight: 500;
+}
+.header h1 {
+  font-size: 22px;
+  font-weight: 700;
+  color: var(--text);
+  line-height: 1.5;
+  margin-bottom: 8px;
+}
+.header p {
+  font-size: 12px;
+  color: var(--text2);
+  line-height: 1.7;
+}
+
+.wrap {
+  max-width: 480px;
+  margin: 0 auto;
+  padding: 24px 20px 0;
+}
+
+/* Progress */
+.progress-wrap { margin-bottom: 24px; }
+.progress-label {
+  display: flex;
+  justify-content: space-between;
+  margin-bottom: 8px;
+  font-size: 11px;
+  color: var(--muted);
+  letter-spacing: 1px;
+}
+.progress-label strong { color: var(--accent); font-weight: 500; }
+.progress-bar {
+  height: 4px;
+  background: rgba(180,140,130,0.15);
+  border-radius: 2px;
+  overflow: hidden;
+}
+.progress-fill {
+  height: 100%;
+  background: linear-gradient(90deg, var(--pink), var(--beige));
+  border-radius: 2px;
+  transition: width 0.4s ease;
+  width: 0%;
+}
+
+/* Section */
+.section {
+  display: none;
+}
+.section.active { display: block; }
+
+.section-header {
+  margin-bottom: 20px;
+}
+.section-num {
+  font-size: 10px;
+  letter-spacing: 3px;
+  color: var(--accent);
+  font-weight: 500;
+  margin-bottom: 6px;
+  text-transform: uppercase;
+}
+.section-title {
+  font-size: 18px;
+  font-weight: 700;
+  color: var(--text);
+  line-height: 1.4;
+  margin-bottom: 6px;
+}
+.section-desc {
+  font-size: 12px;
+  color: var(--text2);
+  line-height: 1.8;
+}
+
+/* Check items */
+.check-group { margin-bottom: 20px; }
+.group-label {
+  font-size: 10px;
+  letter-spacing: 2px;
+  color: var(--accent);
+  font-weight: 500;
+  margin-bottom: 10px;
+  padding-bottom: 6px;
+  border-bottom: 1px solid rgba(180,140,130,0.2);
+  text-transform: uppercase;
+}
+
+.check-item {
+  display: flex;
+  align-items: flex-start;
+  gap: 14px;
+  padding: 12px 0;
+  border-bottom: 1px solid rgba(180,140,130,0.1);
+  cursor: pointer;
+  transition: opacity 0.2s;
+}
+.check-item:last-child { border-bottom: none; }
+.check-item:hover { opacity: 0.75; }
+
+.check-box {
+  flex-shrink: 0;
+  width: 22px;
+  height: 22px;
+  border: 1.5px solid rgba(180,140,130,0.35);
+  border-radius: 6px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  margin-top: 1px;
+  transition: all 0.2s;
+  background: var(--surface);
+}
+.check-item.checked .check-box {
+  background: var(--pink);
+  border-color: var(--pink);
+}
+.check-box svg { display: none; }
+.check-item.checked .check-box svg { display: block; }
+
+.check-label {
+  font-size: 14px;
+  color: var(--text);
+  line-height: 1.5;
+}
+.check-item.checked .check-label {
+  color: var(--muted);
+  text-decoration: line-through;
+  text-decoration-color: rgba(180,140,130,0.4);
+}
+
+/* Nav buttons */
+.nav-buttons {
+  display: flex;
+  gap: 10px;
+  margin-top: 24px;
+}
+.nav-btn {
+  flex: 1;
+  padding: 14px;
+  border-radius: var(--radius);
+  font-family: 'Noto Sans JP', sans-serif;
+  font-size: 13px;
+  font-weight: 500;
+  cursor: pointer;
+  transition: all 0.2s;
+  border: 1px solid rgba(180,140,130,0.25);
+  background: var(--bg2);
+  color: var(--text2);
+}
+.nav-btn.next {
+  background: var(--pink);
+  color: #fff;
+  border-color: var(--pink);
+}
+.nav-btn:hover { opacity: 0.8; }
+
+/* Result page */
+.result-page { display: none; }
+.result-page.active { display: block; }
+
+.result-header {
+  text-align: center;
+  padding: 24px 0 20px;
+}
+.result-header .emoji { font-size: 48px; margin-bottom: 12px; }
+.result-header h2 {
+  font-size: 20px;
+  font-weight: 700;
+  color: var(--text);
+  margin-bottom: 8px;
+}
+.result-header p {
+  font-size: 13px;
+  color: var(--text2);
+  line-height: 1.8;
+}
+
+.type-card {
+  background: var(--surface);
+  border-radius: var(--radius);
+  padding: 20px;
+  margin-bottom: 14px;
+  border-left: 4px solid var(--pink);
+  border: 1px solid rgba(180,140,130,0.2);
+  border-left: 4px solid var(--pink);
+}
+.type-card.secondary {
+  border-left-color: var(--beige);
+  opacity: 0.85;
+}
+
+.type-badge {
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  font-size: 10px;
+  letter-spacing: 2px;
+  color: var(--accent);
+  font-weight: 500;
+  margin-bottom: 8px;
+  text-transform: uppercase;
+}
+.type-name {
+  font-size: 17px;
+  font-weight: 700;
+  color: var(--text);
+  margin-bottom: 10px;
+}
+.type-desc {
+  font-size: 13px;
+  color: var(--text2);
+  line-height: 1.8;
+  margin-bottom: 12px;
+}
+.type-points {
+  background: var(--pink-pale);
+  border-radius: 8px;
+  padding: 12px 14px;
+}
+.type-points p {
+  font-size: 11px;
+  color: var(--accent);
+  font-weight: 500;
+  letter-spacing: 1px;
+  margin-bottom: 6px;
+  text-transform: uppercase;
+}
+.type-points ul {
+  list-style: none;
+  font-size: 12px;
+  color: var(--text2);
+  line-height: 2;
+}
+.type-points ul li::before { content: '・'; }
+
+/* Flow card */
+.flow-card {
+  background: var(--surface);
+  border-radius: var(--radius);
+  padding: 18px;
+  margin-bottom: 14px;
+  border: 1px solid rgba(180,140,130,0.2);
+}
+.flow-card h4 {
+  font-size: 13px;
+  font-weight: 700;
+  color: var(--text);
+  margin-bottom: 10px;
+}
+.flow-item {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  padding: 6px 0;
+  font-size: 12px;
+  color: var(--text2);
+  line-height: 1.5;
+}
+.flow-arrow {
+  font-size: 10px;
+  color: var(--muted);
+  padding: 0 4px;
+}
+
+/* CTA */
+.cta-card {
+  background: linear-gradient(135deg, #e8d0cb, #dfc5bc);
+  border-radius: var(--radius);
+  padding: 24px;
+  text-align: center;
+  margin-top: 20px;
+}
+.cta-card h3 {
+  font-size: 16px;
+  font-weight: 700;
+  color: var(--text);
+  margin-bottom: 10px;
+  line-height: 1.5;
+}
+.cta-card p {
+  font-size: 12px;
+  color: var(--text2);
+  line-height: 1.8;
+  margin-bottom: 16px;
+}
+.cta-btn {
+  display: inline-block;
+  background: var(--pink);
+  color: #fff;
+  padding: 14px 32px;
+  border-radius: 24px;
+  font-size: 14px;
+  font-weight: 500;
+  border: none;
+  cursor: pointer;
+  font-family: 'Noto Sans JP', sans-serif;
+  letter-spacing: 1px;
+}
+
+.retry-btn {
+  display: block;
+  text-align: center;
+  margin-top: 16px;
+  font-size: 12px;
+  color: var(--muted);
+  cursor: pointer;
+  background: none;
+  border: none;
+  font-family: 'Noto Sans JP', sans-serif;
+  width: 100%;
+  padding: 8px;
+}
+
+.note-text {
+  font-size: 11px;
+  color: var(--muted);
+  line-height: 1.8;
+  text-align: center;
+  margin-top: 20px;
+  padding: 0 8px;
+}
+</style>
+</head>
+<body>
+
+<div class="header">
+  <div class="header-badge">Mrs. M × Sleep Type</div>
+  <h1>まず自分を知る<br>眠りタイプ診断</h1>
+  <p>当てはまるものにチェックを入れてください<br>複数選択OK・正直に答えるほど精度が上がります</p>
+</div>
+
+<div class="wrap">
+  <div class="progress-wrap">
+    <div class="progress-label">
+      <span>PROGRESS</span>
+      <strong id="progress-text">1 / 6</strong>
+    </div>
+    <div class="progress-bar">
+      <div class="progress-fill" id="progress-fill" style="width:16%"></div>
+    </div>
+  </div>
+
+  <!-- Section A -->
+  <div class="section active" id="sec-0">
+    <div class="section-header">
+      <div class="section-num">STEP 1 / 6</div>
+      <div class="section-title">夜、布団に入ってから…</div>
+      <div class="section-desc">当てはまるものをすべて選んでください</div>
+    </div>
+    <div class="check-group">
+      <div class="group-label">寝つきについて</div>
+      <div class="check-item" data-type="A" onclick="toggleCheck(this)">
+        <div class="check-box"><svg width="12" height="10" viewBox="0 0 12 10" fill="none"><path d="M1 5L4.5 8.5L11 1" stroke="white" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/></svg></div>
+        <div class="check-label">布団に入ってから30分以上眠れない</div>
+      </div>
+      <div class="check-item" data-type="A" onclick="toggleCheck(this)">
+        <div class="check-box"><svg width="12" height="10" viewBox="0 0 12 10" fill="none"><path d="M1 5L4.5 8.5L11 1" stroke="white" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/></svg></div>
+        <div class="check-label">寝る前に考え事が止まらない</div>
+      </div>
+      <div class="check-item" data-type="A" onclick="toggleCheck(this)">
+        <div class="check-box"><svg width="12" height="10" viewBox="0 0 12 10" fill="none"><path d="M1 5L4.5 8.5L11 1" stroke="white" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/></svg></div>
+        <div class="check-label">布団の中でスマホを見てしまう</div>
+      </div>
+      <div class="check-item" data-type="A" onclick="toggleCheck(this)">
+        <div class="check-box"><svg width="12" height="10" viewBox="0 0 12 10" fill="none"><path d="M1 5L4.5 8.5L11 1" stroke="white" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/></svg></div>
+        <div class="check-label">早く寝なきゃと思うほど眠れない</div>
+      </div>
+      <div class="check-item" data-type="A" onclick="toggleCheck(this)">
+        <div class="check-box"><svg width="12" height="10" viewBox="0 0 12 10" fill="none"><path d="M1 5L4.5 8.5L11 1" stroke="white" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/></svg></div>
+        <div class="check-label">夜に仕事や家事の段取りを考えてしまう</div>
+      </div>
+    </div>
+    <div class="nav-buttons">
+      <button class="nav-btn next" onclick="nextSection(0)">次へ →</button>
+    </div>
+  </div>
+
+  <!-- Section B -->
+  <div class="section" id="sec-1">
+    <div class="section-header">
+      <div class="section-num">STEP 2 / 6</div>
+      <div class="section-title">夜中・早朝の目覚めについて</div>
+      <div class="section-desc">当てはまるものをすべて選んでください</div>
+    </div>
+    <div class="check-group">
+      <div class="group-label">夜中の覚醒</div>
+      <div class="check-item" data-type="B" onclick="toggleCheck(this)">
+        <div class="check-box"><svg width="12" height="10" viewBox="0 0 12 10" fill="none"><path d="M1 5L4.5 8.5L11 1" stroke="white" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/></svg></div>
+        <div class="check-label">2時・3時・4時ごろに目が覚める</div>
+      </div>
+      <div class="check-item" data-type="B" onclick="toggleCheck(this)">
+        <div class="check-box"><svg width="12" height="10" viewBox="0 0 12 10" fill="none"><path d="M1 5L4.5 8.5L11 1" stroke="white" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/></svg></div>
+        <div class="check-label">トイレで起きることが多い</div>
+      </div>
+      <div class="check-item" data-type="B" onclick="toggleCheck(this)">
+        <div class="check-box"><svg width="12" height="10" viewBox="0 0 12 10" fill="none"><path d="M1 5L4.5 8.5L11 1" stroke="white" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/></svg></div>
+        <div class="check-label">一度起きると眠りが浅い</div>
+      </div>
+      <div class="check-item" data-type="B" onclick="toggleCheck(this)">
+        <div class="check-box"><svg width="12" height="10" viewBox="0 0 12 10" fill="none"><path d="M1 5L4.5 8.5L11 1" stroke="white" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/></svg></div>
+        <div class="check-label">朝まで寝た感じがしない</div>
+      </div>
+      <div class="check-item" data-type="B" onclick="toggleCheck(this)">
+        <div class="check-box"><svg width="12" height="10" viewBox="0 0 12 10" fill="none"><path d="M1 5L4.5 8.5L11 1" stroke="white" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/></svg></div>
+        <div class="check-label">目覚ましより前に起きてしまう</div>
+      </div>
+    </div>
+    <div class="nav-buttons">
+      <button class="nav-btn" onclick="prevSection(1)">← 戻る</button>
+      <button class="nav-btn next" onclick="nextSection(1)">次へ →</button>
+    </div>
+  </div>
+
+  <!-- Section C -->
+  <div class="section" id="sec-2">
+    <div class="section-header">
+      <div class="section-num">STEP 3 / 6</div>
+      <div class="section-title">朝の目覚めについて</div>
+      <div class="section-desc">当てはまるものをすべて選んでください</div>
+    </div>
+    <div class="check-group">
+      <div class="group-label">朝の状態</div>
+      <div class="check-item" data-type="C" onclick="toggleCheck(this)">
+        <div class="check-box"><svg width="12" height="10" viewBox="0 0 12 10" fill="none"><path d="M1 5L4.5 8.5L11 1" stroke="white" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/></svg></div>
+        <div class="check-label">睡眠時間はあるのに朝が重い</div>
+      </div>
+      <div class="check-item" data-type="C" onclick="toggleCheck(this)">
+        <div class="check-box"><svg width="12" height="10" viewBox="0 0 12 10" fill="none"><path d="M1 5L4.5 8.5L11 1" stroke="white" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/></svg></div>
+        <div class="check-label">起きた瞬間から疲れている</div>
+      </div>
+      <div class="check-item" data-type="C" onclick="toggleCheck(this)">
+        <div class="check-box"><svg width="12" height="10" viewBox="0 0 12 10" fill="none"><path d="M1 5L4.5 8.5L11 1" stroke="white" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/></svg></div>
+        <div class="check-label">午前中にエンジンがかからない</div>
+      </div>
+      <div class="check-item" data-type="C" onclick="toggleCheck(this)">
+        <div class="check-box"><svg width="12" height="10" viewBox="0 0 12 10" fill="none"><path d="M1 5L4.5 8.5L11 1" stroke="white" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/></svg></div>
+        <div class="check-label">朝からコーヒーが必要</div>
+      </div>
+      <div class="check-item" data-type="C" onclick="toggleCheck(this)">
+        <div class="check-box"><svg width="12" height="10" viewBox="0 0 12 10" fill="none"><path d="M1 5L4.5 8.5L11 1" stroke="white" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/></svg></div>
+        <div class="check-label">休日はずっと寝ていたい</div>
+      </div>
+    </div>
+    <div class="nav-buttons">
+      <button class="nav-btn" onclick="prevSection(2)">← 戻る</button>
+      <button class="nav-btn next" onclick="nextSection(2)">次へ →</button>
+    </div>
+  </div>
+
+  <!-- Section D -->
+  <div class="section" id="sec-3">
+    <div class="section-header">
+      <div class="section-num">STEP 4 / 6</div>
+      <div class="section-title">昼間の状態について</div>
+      <div class="section-desc">当てはまるものをすべて選んでください</div>
+    </div>
+    <div class="check-group">
+      <div class="group-label">昼の眠気・集中力</div>
+      <div class="check-item" data-type="D" onclick="toggleCheck(this)">
+        <div class="check-box"><svg width="12" height="10" viewBox="0 0 12 10" fill="none"><path d="M1 5L4.5 8.5L11 1" stroke="white" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/></svg></div>
+        <div class="check-label">昼食後に強い眠気が来る</div>
+      </div>
+      <div class="check-item" data-type="D" onclick="toggleCheck(this)">
+        <div class="check-box"><svg width="12" height="10" viewBox="0 0 12 10" fill="none"><path d="M1 5L4.5 8.5L11 1" stroke="white" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/></svg></div>
+        <div class="check-label">午後の集中力が落ちる</div>
+      </div>
+      <div class="check-item" data-type="D" onclick="toggleCheck(this)">
+        <div class="check-box"><svg width="12" height="10" viewBox="0 0 12 10" fill="none"><path d="M1 5L4.5 8.5L11 1" stroke="white" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/></svg></div>
+        <div class="check-label">甘いものかコーヒーが欲しくなる</div>
+      </div>
+      <div class="check-item" data-type="D" onclick="toggleCheck(this)">
+        <div class="check-box"><svg width="12" height="10" viewBox="0 0 12 10" fill="none"><path d="M1 5L4.5 8.5L11 1" stroke="white" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/></svg></div>
+        <div class="check-label">昼はパン・麺・おにぎりだけが多い</div>
+      </div>
+      <div class="check-item" data-type="D" onclick="toggleCheck(this)">
+        <div class="check-box"><svg width="12" height="10" viewBox="0 0 12 10" fill="none"><path d="M1 5L4.5 8.5L11 1" stroke="white" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/></svg></div>
+        <div class="check-label">夕方になると疲れ切っている</div>
+      </div>
+    </div>
+    <div class="nav-buttons">
+      <button class="nav-btn" onclick="prevSection(3)">← 戻る</button>
+      <button class="nav-btn next" onclick="nextSection(3)">次へ →</button>
+    </div>
+  </div>
+
+  <!-- Section E -->
+  <div class="section" id="sec-4">
+    <div class="section-header">
+      <div class="section-num">STEP 5 / 6</div>
+      <div class="section-title">夕方〜夜の状態について</div>
+      <div class="section-desc">当てはまるものをすべて選んでください</div>
+    </div>
+    <div class="check-group">
+      <div class="group-label">夕方の疲れ</div>
+      <div class="check-item" data-type="E" onclick="toggleCheck(this)">
+        <div class="check-box"><svg width="12" height="10" viewBox="0 0 12 10" fill="none"><path d="M1 5L4.5 8.5L11 1" stroke="white" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/></svg></div>
+        <div class="check-label">夕方になると別人のように疲れる</div>
+      </div>
+      <div class="check-item" data-type="E" onclick="toggleCheck(this)">
+        <div class="check-box"><svg width="12" height="10" viewBox="0 0 12 10" fill="none"><path d="M1 5L4.5 8.5L11 1" stroke="white" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/></svg></div>
+        <div class="check-label">夕飯を作る前にもう限界</div>
+      </div>
+      <div class="check-item" data-type="E" onclick="toggleCheck(this)">
+        <div class="check-box"><svg width="12" height="10" viewBox="0 0 12 10" fill="none"><path d="M1 5L4.5 8.5L11 1" stroke="white" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/></svg></div>
+        <div class="check-label">甘いものを食べないと動けない</div>
+      </div>
+      <div class="check-item" data-type="E" onclick="toggleCheck(this)">
+        <div class="check-box"><svg width="12" height="10" viewBox="0 0 12 10" fill="none"><path d="M1 5L4.5 8.5L11 1" stroke="white" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/></svg></div>
+        <div class="check-label">コーヒーで無理やり持たせる</div>
+      </div>
+      <div class="check-item" data-type="E" onclick="toggleCheck(this)">
+        <div class="check-box"><svg width="12" height="10" viewBox="0 0 12 10" fill="none"><path d="M1 5L4.5 8.5L11 1" stroke="white" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/></svg></div>
+        <div class="check-label">夜にイライラしやすい</div>
+      </div>
+    </div>
+    <div class="nav-buttons">
+      <button class="nav-btn" onclick="prevSection(4)">← 戻る</button>
+      <button class="nav-btn next" onclick="nextSection(4)">次へ →</button>
+    </div>
+  </div>
+
+  <!-- Section F -->
+  <div class="section" id="sec-5">
+    <div class="section-header">
+      <div class="section-num">STEP 6 / 6</div>
+      <div class="section-title">体の変化・ホルモンについて</div>
+      <div class="section-desc">当てはまるものをすべて選んでください</div>
+    </div>
+    <div class="check-group">
+      <div class="group-label">更年期・ホルモンゆらぎ</div>
+      <div class="check-item" data-type="F" onclick="toggleCheck(this)">
+        <div class="check-box"><svg width="12" height="10" viewBox="0 0 12 10" fill="none"><path d="M1 5L4.5 8.5L11 1" stroke="white" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/></svg></div>
+        <div class="check-label">40代以降、眠りが変わった</div>
+      </div>
+      <div class="check-item" data-type="F" onclick="toggleCheck(this)">
+        <div class="check-box"><svg width="12" height="10" viewBox="0 0 12 10" fill="none"><path d="M1 5L4.5 8.5L11 1" stroke="white" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/></svg></div>
+        <div class="check-label">夜中に暑くて起きる・寝汗がある</div>
+      </div>
+      <div class="check-item" data-type="F" onclick="toggleCheck(this)">
+        <div class="check-box"><svg width="12" height="10" viewBox="0 0 12 10" fill="none"><path d="M1 5L4.5 8.5L11 1" stroke="white" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/></svg></div>
+        <div class="check-label">イライラしやすくなった</div>
+      </div>
+      <div class="check-item" data-type="F" onclick="toggleCheck(this)">
+        <div class="check-box"><svg width="12" height="10" viewBox="0 0 12 10" fill="none"><path d="M1 5L4.5 8.5L11 1" stroke="white" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/></svg></div>
+        <div class="check-label">以前より疲れが抜けない</div>
+      </div>
+      <div class="check-item" data-type="F" onclick="toggleCheck(this)">
+        <div class="check-box"><svg width="12" height="10" viewBox="0 0 12 10" fill="none"><path d="M1 5L4.5 8.5L11 1" stroke="white" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/></svg></div>
+        <div class="check-label">体重やむくみも気になる</div>
+      </div>
+    </div>
+    <div class="nav-buttons">
+      <button class="nav-btn" onclick="prevSection(5)">← 戻る</button>
+      <button class="nav-btn next" onclick="showResult()">結果を見る 🌿</button>
+    </div>
+  </div>
+
+  <!-- Result -->
+  <div class="result-page" id="result-page">
+    <div class="result-header">
+      <div class="emoji">🌙</div>
+      <h2 id="result-title">あなたの眠りタイプ</h2>
+      <p id="result-subtitle"></p>
+    </div>
+    <div id="result-types"></div>
+    <div id="result-flow"></div>
+    <div class="cta-card">
+      <h3>このタイプに合わせた<br>7日間サポートを受けませんか？</h3>
+      <p>診断結果をそのままミセスMに送ると、あなたの眠りタイプに合わせた個別プランを作ります。先着10名限定です。</p>
+      <button class="cta-btn">サポートに申し込む🌿</button>
+    </div>
+    <p class="note-text">※本診断は医療診断ではありません。個人の見解に基づくセルフチェックです。気になる症状が続く場合は医師にご相談ください。</p>
+    <button class="retry-btn" onclick="retryDiagnosis()">もう一度診断する</button>
+  </div>
+
+</div><!-- /wrap -->
+
+<script>
+const typeInfo = {
+  A: {
+    name: 'Aタイプ｜寝つけないタイプ',
+    emoji: '😓',
+    desc: '夜の交感神経が高いままになっている可能性があります。体は眠りたいのに、脳がまだ活動モードのままです。',
+    points: ['寝る前のスマホ・ブルーライト', '入浴のタイミング', '夜の情報量・思考量', '布団に入るタイミング'],
+    action: '就寝1時間前からスマホを置き、照明を暗くすることから始めましょう。'
+  },
+  B: {
+    name: 'Bタイプ｜2〜4時覚醒タイプ',
+    emoji: '🕐',
+    desc: '早朝の覚醒リズムや夜間の血糖値が乱れている可能性があります。覚醒が先でトイレは後のことが多いです。',
+    points: ['夕食時間と夕食後の甘いもの', 'カフェインの最終摂取時間', '血糖値の乱高下', 'ストレスホルモンの影響'],
+    action: 'まず夕食後の甘いものをやめることと、夕食時間を記録することから始めましょう。'
+  },
+  C: {
+    name: 'Cタイプ｜朝だるいタイプ',
+    emoji: '😴',
+    desc: '睡眠中に体が十分に回復できていない可能性があります。ミトコンドリアが夜通し消化に使われているサインです。',
+    points: ['夕食時間と夜の胃腸への負担', 'アルコールの影響', '寝る前スマホの覚醒効果', '朝の光と水分不足'],
+    action: '就寝3時間前に食事を終えることと、朝起きたら光を浴びることから始めましょう。'
+  },
+  D: {
+    name: 'Dタイプ｜昼食後眠いタイプ',
+    emoji: '🍱',
+    desc: '昼食後の血糖値スパイクが原因の可能性があります。糖質だけの昼食が血糖値を乱し、夜の眠りにも影響します。',
+    points: ['昼食の糖質とたんぱく質のバランス', '食後の血糖値の乱高下', '午後のカフェイン依存', '夕方以降の疲れとの連鎖'],
+    action: '昼食に卵・豆腐・納豆などたんぱく質を1品加えるだけで変わり始めます。'
+  },
+  E: {
+    name: 'Eタイプ｜夕方電池切れタイプ',
+    emoji: '🔋',
+    desc: '朝昼の栄養不足と日中の水分不足が積み重なっています。夕方の疲れは夜の睡眠を乱す入り口です。',
+    points: ['朝昼の食事の質とたんぱく質', '日中の水分摂取量', 'カフェインへの依存パターン', '睡眠不足の蓄積'],
+    action: '1日1.5Lの水を意識して飲み、朝食にたんぱく質を加えることから始めましょう。'
+  },
+  F: {
+    name: 'Fタイプ｜更年期ゆらぎタイプ',
+    emoji: '🌡️',
+    desc: 'ホルモンのゆらぎが自律神経と体温調節に影響しています。ミトコンドリアの働きを整えることで変わる可能性があります。',
+    points: ['エストロゲン低下と体温調節の乱れ', '自律神経のバランス', 'ミトコンドリアの働きやすさ', '生活の土台づくり'],
+    action: '症状が強い場合は婦人科への相談も大切です。生活の土台を整えることと医療は並行できます。'
+  }
+};
+
+const scores = { A:0, B:0, C:0, D:0, E:0, F:0 };
+let currentSection = 0;
+const totalSections = 6;
+
+function toggleCheck(item) {
+  item.classList.toggle('checked');
+}
+
+function nextSection(idx) {
+  document.getElementById('sec-' + idx).classList.remove('active');
+  currentSection = idx + 1;
+  document.getElementById('sec-' + currentSection).classList.add('active');
+  updateProgress();
+  window.scrollTo(0, 0);
+}
+
+function prevSection(idx) {
+  document.getElementById('sec-' + idx).classList.remove('active');
+  currentSection = idx - 1;
+  document.getElementById('sec-' + currentSection).classList.add('active');
+  updateProgress();
+  window.scrollTo(0, 0);
+}
+
+function updateProgress() {
+  const pct = ((currentSection + 1) / totalSections * 100).toFixed(0);
+  document.getElementById('progress-fill').style.width = pct + '%';
+  document.getElementById('progress-text').textContent = (currentSection + 1) + ' / ' + totalSections;
+}
+
+function showResult() {
+  // Count scores
+  Object.keys(scores).forEach(k => scores[k] = 0);
+  document.querySelectorAll('.check-item.checked').forEach(item => {
+    const t = item.dataset.type;
+    if (t) scores[t]++;
+  });
+
+  // Sort types by score
+  const sorted = Object.entries(scores)
+    .filter(([,v]) => v > 0)
+    .sort((a,b) => b[1]-a[1]);
+
+  // Hide all sections, show result
+  document.querySelectorAll('.section').forEach(s => s.classList.remove('active'));
+  document.getElementById('result-page').classList.add('active');
+
+  const container = document.getElementById('result-types');
+  const flowContainer = document.getElementById('result-flow');
+  container.innerHTML = '';
+  flowContainer.innerHTML = '';
+
+  if (sorted.length === 0) {
+    document.getElementById('result-title').textContent = 'おめでとうございます🌿';
+    document.getElementById('result-subtitle').textContent = '現時点では大きな睡眠の乱れは見られません。この状態を維持するための習慣づくりをしていきましょう。';
+    return;
+  }
+
+  const primary = sorted[0];
+  const secondary = sorted.slice(1, 3);
+
+  document.getElementById('result-title').textContent = 'あなたのメインタイプ';
+  document.getElementById('result-subtitle').textContent = '複数のタイプが重なっている方がほとんどです。まずメインタイプから整えていきましょう。';
+
+  // Primary type
+  const info = typeInfo[primary[0]];
+  container.innerHTML += `
+    <div class="type-card">
+      <div class="type-badge">🌟 メインタイプ（${primary[1]}項目該当）</div>
+      <div class="type-name">${info.emoji} ${info.name}</div>
+      <div class="type-desc">${info.desc}</div>
+      <div class="type-points">
+        <p>見るポイント</p>
+        <ul>${info.points.map(p => `<li>${p}</li>`).join('')}</ul>
+      </div>
+      <div style="margin-top:12px;font-size:12px;color:var(--accent);line-height:1.8;">
+        ✅ まず今夜から：${info.action}
+      </div>
+    </div>
+  `;
+
+  // Secondary types
+  secondary.forEach(([type, score]) => {
+    const inf = typeInfo[type];
+    container.innerHTML += `
+      <div class="type-card secondary">
+        <div class="type-badge">サブタイプ（${score}項目該当）</div>
+        <div class="type-name">${inf.emoji} ${inf.name}</div>
+        <div class="type-desc">${inf.desc}</div>
+      </div>
+    `;
+  });
+
+  // Flow if multiple types
+  if (sorted.length >= 2) {
+    const flowItems = sorted.map(([t]) => typeInfo[t].name.split('｜')[1]);
+    let flowHtml = '<div class="flow-card"><h4>🔗 あなたの睡眠の連鎖パターン</h4>';
+    flowItems.forEach((item, i) => {
+      flowHtml += `<div class="flow-item">${i > 0 ? '<span class="flow-arrow">↓</span>' : ''} ${item}</div>`;
+    });
+    flowHtml += '<div style="margin-top:10px;font-size:12px;color:var(--text2);line-height:1.8;">睡眠は線でつながっています。メインタイプから整えることで、他のタイプも連動して改善しやすくなります。</div></div>';
+    flowContainer.innerHTML = flowHtml;
+  }
+
+  document.getElementById('progress-fill').style.width = '100%';
+  document.getElementById('progress-text').textContent = '診断完了';
+  window.scrollTo(0, 0);
+}
+
+function retryDiagnosis() {
+  document.querySelectorAll('.check-item').forEach(item => item.classList.remove('checked'));
+  Object.keys(scores).forEach(k => scores[k] = 0);
+  document.getElementById('result-page').classList.remove('active');
+  currentSection = 0;
+  document.getElementById('sec-0').classList.add('active');
+  updateProgress();
+  window.scrollTo(0, 0);
+}
+</script>
+</body>
+</html>
