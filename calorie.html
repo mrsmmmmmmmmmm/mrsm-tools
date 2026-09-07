@@ -1,0 +1,214 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>ミトコンドリア活性化カロリー診断</title>
+<style>
+*{box-sizing:border-box;margin:0;padding:0;}
+body{font-family:'Hiragino Kaku Gothic Pro','Noto Sans JP',sans-serif;background:#FDF6F0;}
+.wrap{max-width:480px;margin:0 auto;padding:0 0 40px;}
+.header{background:linear-gradient(135deg,#C4876A,#A06650);border-radius:0 0 20px 20px;padding:28px 24px 24px;text-align:center;}
+.header-eye{font-size:10px;letter-spacing:3px;color:#EDD5C5;margin-bottom:8px;}
+.header-title{font-size:22px;font-weight:800;color:#fff;line-height:1.35;margin-bottom:8px;}
+.header-sub{font-size:12px;color:#EDD5C5;line-height:1.6;}
+.section{margin:16px 16px 0;}
+.card{background:#fff;border-radius:16px;padding:20px;margin-bottom:12px;}
+.label{font-size:11px;color:#8C7B72;font-weight:600;display:block;margin-bottom:8px;}
+.row{display:flex;gap:10px;margin-bottom:16px;}
+.gender-btn{flex:1;padding:10px 0;border-radius:10px;border:2px solid #E8D5C8;background:#fff;font-size:13px;font-weight:700;color:#8C7B72;cursor:pointer;}
+.gender-btn.active{border-color:#C4876A;background:#F5E6DA;color:#C4876A;}
+.field{margin-bottom:14px;}
+.input-row{display:flex;align-items:center;gap:8px;}
+.input-row input{flex:1;padding:11px 13px;border-radius:10px;border:1.5px solid #E8D5C8;font-size:15px;color:#3D2B1F;background:#fff;outline:none;}
+.input-row input:focus{border-color:#C4876A;}
+.unit{font-size:13px;color:#8C7B72;min-width:22px;}
+.act-btn{width:100%;padding:10px 14px;border-radius:10px;border:2px solid #E8D5C8;background:#fff;text-align:left;cursor:pointer;margin-bottom:7px;}
+.act-btn.active{border-color:#C4876A;background:#F5E6DA;}
+.act-name{font-size:13px;font-weight:700;color:#3D2B1F;}
+.act-btn.active .act-name{color:#C4876A;}
+.act-desc{font-size:11px;color:#8C7B72;margin-top:2px;}
+.cta{width:100%;margin-top:16px;padding:15px 0;border-radius:14px;border:none;background:linear-gradient(135deg,#C4876A,#A06650);color:#fff;font-size:15px;font-weight:800;cursor:pointer;letter-spacing:1px;}
+.cta:disabled{opacity:.4;cursor:not-allowed;}
+.hint{text-align:center;font-size:11px;color:#8C7B72;margin-top:8px;}
+.bmi-card{background:#F5E6DA;border-radius:14px;padding:14px 18px;margin-bottom:10px;text-align:center;}
+.bmi-label{font-size:12px;color:#A06650;font-weight:600;}
+.bmi-val{font-size:22px;font-weight:800;color:#A06650;}
+.result-card{background:#fff;border-radius:14px;padding:18px 20px;margin-bottom:10px;}
+.rc-head{display:flex;align-items:center;gap:10px;margin-bottom:10px;}
+.rc-icon{font-size:18px;}
+.rc-lbl{font-size:13px;font-weight:700;color:#8C7B72;}
+.rc-val{font-size:26px;font-weight:800;margin-bottom:4px;}
+.rc-sub{font-size:11px;color:#8C7B72;}
+.food-grid{display:grid;grid-template-columns:1fr 1fr;gap:6px;margin-top:10px;background:#F5E6DA;border-radius:10px;padding:10px;}
+.food-item{display:flex;justify-content:space-between;font-size:11px;}
+.food-item span:last-child{font-weight:700;}
+.mineral-item{margin-bottom:12px;padding-bottom:12px;border-bottom:1px solid #F5E6DA;}
+.mineral-item:last-child{border-bottom:none;margin-bottom:0;padding-bottom:0;}
+.mineral-name{font-size:13px;font-weight:700;color:#3D2B1F;}
+.mineral-role{font-size:11px;color:#C4876A;margin-bottom:3px;}
+.mineral-food{font-size:11px;color:#8C7B72;}
+.mito-msg{background:#FDF0E8;border-radius:14px;padding:16px 18px;margin-bottom:12px;border-left:3px solid #C4876A;}
+.mito-msg-title{font-size:13px;font-weight:800;color:#A06650;margin-bottom:6px;}
+.mito-msg-body{font-size:12px;color:#3D2B1F;line-height:1.8;}
+.retry{width:100%;padding:13px 0;border-radius:14px;border:2px solid #C4876A;background:#fff;color:#C4876A;font-size:14px;font-weight:700;cursor:pointer;margin-top:4px;}
+</style>
+</head>
+<body>
+<div class="wrap">
+  <div class="header">
+    <div class="header-eye">MITO CALORIE CHECK</div>
+    <div class="header-title">ミトコンドリア活性化<br>カロリー診断</div>
+    <div class="header-sub">食べ過ぎない・よく眠る・たんぱく質・ミネラル<br>あなたに必要な数値を知ろう</div>
+  </div>
+
+  <div id="input-view">
+    <div class="section">
+      <div class="card">
+        <div style="font-size:13px;font-weight:700;color:#C4876A;margin-bottom:16px;">
+          <span style="background:#F5E6DA;border-radius:8px;padding:4px 10px;">あなたの情報を入力</span>
+        </div>
+        <label class="label">性別</label>
+        <div class="row" style="margin-bottom:18px;">
+          <button class="gender-btn active" id="btn-female" onclick="setGender('female')">女性</button>
+          <button class="gender-btn" id="btn-male" onclick="setGender('male')">男性</button>
+        </div>
+        <div class="field">
+          <label class="label">身長</label>
+          <div class="input-row"><input type="number" id="height" placeholder="例: 158" min="100" max="250" oninput="validateForm()"><span class="unit">cm</span></div>
+        </div>
+        <div class="field">
+          <label class="label">体重</label>
+          <div class="input-row"><input type="number" id="weight" placeholder="例: 55" min="30" max="200" oninput="validateForm()"><span class="unit">kg</span></div>
+        </div>
+        <div class="field" style="margin-bottom:18px;">
+          <label class="label">年齢</label>
+          <div class="input-row"><input type="number" id="age" placeholder="例: 48" min="10" max="120" oninput="validateForm()"><span class="unit">歳</span></div>
+        </div>
+        <label class="label">活動レベル</label>
+        <div id="act-btns">
+          <button class="act-btn" onclick="setActivity(1.2,this)"><div class="act-name">ほぼ座りっぱなし</div><div class="act-desc">デスクワーク中心・運動なし</div></button>
+          <button class="act-btn" onclick="setActivity(1.375,this)"><div class="act-name">軽い活動</div><div class="act-desc">週1〜2回の軽い運動</div></button>
+          <button class="act-btn" onclick="setActivity(1.55,this)"><div class="act-name">中程度の活動</div><div class="act-desc">週3〜5回の運動</div></button>
+          <button class="act-btn" onclick="setActivity(1.725,this)"><div class="act-name">活発</div><div class="act-desc">週6〜7回の運動・立ち仕事</div></button>
+          <button class="act-btn" onclick="setActivity(1.9,this)"><div class="act-name">非常に活発</div><div class="act-desc">ハードな肉体労働・アスリート</div></button>
+        </div>
+        <button class="cta" id="calc-btn" onclick="calculate()" disabled>ミトコンドリア診断を見る</button>
+        <div class="hint" id="hint-msg">全ての項目を入力してください</div>
+      </div>
+    </div>
+  </div>
+
+  <div id="result-view" style="display:none;">
+    <div class="section">
+      <div class="bmi-card">
+        <div class="bmi-label">あなたのBMI</div>
+        <div class="bmi-val" id="res-bmi">—</div>
+      </div>
+      <div class="result-card">
+        <div class="rc-head"><span class="rc-icon">🔥</span><span class="rc-lbl">維持カロリー</span></div>
+        <div class="rc-val" id="res-maint" style="color:#C4876A;"></div>
+        <div class="rc-sub">今の体重を維持するカロリー</div>
+      </div>
+      <div class="result-card">
+        <div class="rc-head"><span class="rc-icon">🌿</span><span class="rc-lbl">ゆるい減量カロリー</span></div>
+        <div class="rc-val" id="res-loss" style="color:#7A9E7E;"></div>
+        <div class="rc-sub">維持カロリーの87.5%｜無理なく絞る目安</div>
+      </div>
+      <div class="result-card">
+        <div class="rc-head"><span class="rc-icon">🥚</span><span class="rc-lbl">1日のたんぱく質目標</span></div>
+        <div class="rc-val" id="res-protein" style="color:#C4876A;"></div>
+        <div class="rc-sub">体重×1.2〜1.6g｜ミトコンドリアの材料</div>
+        <div class="food-grid" id="food-grid"></div>
+      </div>
+      <div class="result-card">
+        <div class="rc-head"><span class="rc-icon">💧</span><span class="rc-lbl">1日の水分目標</span></div>
+        <div class="rc-val" id="res-water" style="color:#6A9AC4;"></div>
+        <div class="rc-sub">体重×35ml｜ただの水で</div>
+      </div>
+      <div class="result-card">
+        <div class="rc-head"><span class="rc-icon">✨</span><span class="rc-lbl">ミトコンドリアに必要なミネラル</span></div>
+        <div id="mineral-list"></div>
+      </div>
+      <div class="mito-msg">
+        <div class="mito-msg-title">ミトコンドリアからのメッセージ</div>
+        <div class="mito-msg-body">数字はあくまで目安。大切なのは<strong>食べ過ぎない・よく眠る・たんぱく質をとる・ミネラルを補う</strong>こと。薬に頼る前にミトコンドリアを活性化させよう。</div>
+      </div>
+      <button class="retry" onclick="retry()">← 入力をやり直す</button>
+    </div>
+  </div>
+</div>
+
+<script>
+var gender='female',activity=null;
+function setGender(g){
+  gender=g;
+  document.getElementById('btn-female').className='gender-btn'+(g==='female'?' active':'');
+  document.getElementById('btn-male').className='gender-btn'+(g==='male'?' active':'');
+  validateForm();
+}
+function setActivity(val,el){
+  activity=val;
+  document.querySelectorAll('.act-btn').forEach(function(b){b.className='act-btn';});
+  el.className='act-btn active';
+  validateForm();
+}
+function validateForm(){
+  var h=parseFloat(document.getElementById('height').value);
+  var w=parseFloat(document.getElementById('weight').value);
+  var a=parseFloat(document.getElementById('age').value);
+  var ok=h>=100&&h<=250&&w>=30&&w<=200&&a>=10&&a<=120&&activity;
+  document.getElementById('calc-btn').disabled=!ok;
+  document.getElementById('hint-msg').style.display=ok?'none':'block';
+}
+function calculate(){
+  var h=parseFloat(document.getElementById('height').value);
+  var w=parseFloat(document.getElementById('weight').value);
+  var a=parseFloat(document.getElementById('age').value);
+  var bmr=gender==='female'?(10*w+6.25*h-5*a-161):(10*w+6.25*h-5*a+5);
+  var maint=Math.round(bmr*activity);
+  var loss=Math.round(maint*0.875);
+  var pMin=Math.round(w*1.2),pMax=Math.round(w*1.6);
+  var water=Math.round(w*35);
+  var bmi=(w/Math.pow(h/100,2)).toFixed(1);
+  document.getElementById('res-bmi').textContent=bmi;
+  document.getElementById('res-maint').textContent=maint+' kcal';
+  document.getElementById('res-loss').textContent=loss+' kcal';
+  document.getElementById('res-protein').textContent=pMin+'〜'+pMax+'g';
+  document.getElementById('res-water').textContent=water+' ml';
+  var foods=[['卵','3個'],['鶏むね肉','約90g'],['豆腐','約300g'],['サバ缶','1缶(190g)']];
+  var fg=document.getElementById('food-grid');
+  fg.innerHTML='';
+  foods.forEach(function(f){
+    var d=document.createElement('div');
+    d.className='food-item';
+    d.innerHTML='<span>'+f[0]+'</span><span>'+f[1]+'</span>';
+    fg.appendChild(d);
+  });
+  var minerals=[
+    {name:'マグネシウム',role:'ミトコンドリアのATP産生に必須',food:'ナッツ・豆腐・ほうれん草'},
+    {name:'鉄',role:'電子伝達系の重要な構成要素',food:'レバー・あさり・小松菜'},
+    {name:'亜鉛',role:'酸化ストレスから細胞を守る',food:'牡蠣・牛肉・卵'},
+    {name:'カリウム',role:'細胞膜の電位維持・エネルギー輸送',food:'バナナ・アボカド・さつまいも'},
+    {name:'セレン',role:'抗酸化酵素の活性化',food:'魚介類・ブラジルナッツ'}
+  ];
+  var ml=document.getElementById('mineral-list');
+  ml.innerHTML='';
+  minerals.forEach(function(m){
+    var d=document.createElement('div');
+    d.className='mineral-item';
+    d.innerHTML='<div style="margin-bottom:4px"><span class="mineral-name">'+m.name+'</span></div><div class="mineral-role">'+m.role+'</div><div class="mineral-food">'+m.food+'</div>';
+    ml.appendChild(d);
+  });
+  document.getElementById('input-view').style.display='none';
+  document.getElementById('result-view').style.display='block';
+  window.scrollTo(0,0);
+}
+function retry(){
+  document.getElementById('result-view').style.display='none';
+  document.getElementById('input-view').style.display='block';
+  window.scrollTo(0,0);
+}
+</script>
+</body>
+</html>
